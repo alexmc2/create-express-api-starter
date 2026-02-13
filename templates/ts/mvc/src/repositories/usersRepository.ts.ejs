@@ -1,4 +1,6 @@
-<% if (isPostgres) { %>import pool from '../db/pool';
+<% if (isPostgres) { %><% if (educational) { %>// The repository isolates all database queries in one place.
+// Route handlers call these functions instead of writing SQL directly.
+<% } %>import pool from '../db/pool';
 
 interface UserRow {
   id: number;
@@ -17,7 +19,8 @@ async function getAll(): Promise<UserRow[]> {
 }
 
 async function create({ name, email }: CreateUserInput): Promise<UserRow> {
-  const result = await pool.query<UserRow>(
+<% if (educational) { %>  // Use parameterised queries ($1, $2) to prevent SQL injection.
+<% } %>  const result = await pool.query<UserRow>(
     'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email',
     [name, email]
   );
@@ -29,7 +32,10 @@ export default {
   getAll,
   create
 };
-<% } else { %>export interface User {
+<% } else { %><% if (educational) { %>// The repository layer keeps data access separate from route logic.
+// This in-memory version stores data in an array — swap it for a real
+// database later by changing only this file.
+<% } %>export interface User {
   id: number;
   name: string;
   email: string | null;

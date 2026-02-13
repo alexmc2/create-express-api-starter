@@ -5,14 +5,18 @@ interface CreateUserPayload {
   email?: unknown;
 }
 
-async function listUsers() {
+<% if (educational) { %>// The service layer contains business logic and validation.
+// It sits between controllers and repositories, keeping both thin.
+<% } %>async function listUsers() {
   return usersRepository.getAll();
 }
 
 async function createUser(payload: CreateUserPayload) {
   const { name, email } = payload;
 
-  if (!name || typeof name !== 'string') {
+<% if (educational) { %>  // Validate before touching the database — throw an error object
+  // with a status code so the error handler can send the right response.
+<% } %>  if (!name || typeof name !== 'string') {
     throw {
       status: 400,
       message: '"name" is required.'

@@ -1,4 +1,6 @@
-import request from 'supertest';
+<% if (educational) { %>// Supertest lets you make HTTP requests against your Express app
+// without starting a real server — fast, isolated, no port conflicts.
+<% } %>import request from 'supertest';
 
 import app from '../src/app';
 

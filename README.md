@@ -1,5 +1,5 @@
 # @alexmc2/create-express-api-starter
-## > **🚧 Work in progress** - this package is under active development and not yet been published to npm.
+### **🚧 Work in progress** - this package is under active development and not yet been published to npm.
 
 A modern scaffolding CLI that generates production-ready Express API projects with sensible defaults. Designed to get beginners up and running quickly while teaching best practices through well-structured code and educational comments.
 
