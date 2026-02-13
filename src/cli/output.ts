@@ -1,10 +1,17 @@
 import path from 'node:path';
 import pc from 'picocolors';
 
-import { architectureLabel, databaseLabel, languageLabel } from '../core/labels.js';
+import {
+  architectureLabel,
+  databaseLabel,
+  languageLabel,
+} from '../core/labels.js';
 import type { GenerationPlan, UserSelections } from '../core/types.js';
 
-export function printDryRunPlan(selection: UserSelections, plan: GenerationPlan): void {
+export function printDryRunPlan(
+  selection: UserSelections,
+  plan: GenerationPlan,
+): void {
   console.log(pc.bold('\nDry run plan'));
   console.log(`Target: ${plan.targetDir}`);
   console.log(`Language: ${languageLabel(selection.language)}`);
@@ -34,7 +41,11 @@ export function printNextSteps(selection: UserSelections): void {
   }
 
   if (selection.databaseMode === 'postgres-psql') {
-    console.log(`${stepNumber}. Copy .env.example to .env and set DATABASE_URL if needed`);
+    console.log(
+      `${stepNumber}. Copy .env.example to .env and set DATABASE_URL if needed`,
+    );
+    stepNumber += 1;
+    console.log(`${stepNumber}. npm run db:create`);
     stepNumber += 1;
     console.log(`${stepNumber}. npm run db:setup`);
     stepNumber += 1;
@@ -43,6 +54,8 @@ export function printNextSteps(selection: UserSelections): void {
   }
 
   if (selection.databaseMode === 'postgres-docker') {
+    console.log(`${stepNumber}. Copy .env.example to .env`);
+    stepNumber += 1;
     console.log(`${stepNumber}. npm run db:up`);
     stepNumber += 1;
     console.log(`${stepNumber}. npm run db:setup`);

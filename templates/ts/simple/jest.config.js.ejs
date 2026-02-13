@@ -2,5 +2,6 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': ['@swc/jest']
   },
-  testEnvironment: 'node'
+  testEnvironment: 'node'<% if (isPostgres) { %>,
+  setupFiles: ['dotenv/config']<% } %>
 };

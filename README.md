@@ -97,6 +97,8 @@ my-api/
 │   ├── routes/
 │   │   ├── health.js       # GET /health
 │   │   └── users.js        # GET & POST /api/users
+│   ├── errors/
+│   │   └── AppError.js     # Custom error class with status codes
 │   └── middleware/
 │       ├── notFound.js     # 404 handler
 │       └── errorHandler.js # Centralised error handler

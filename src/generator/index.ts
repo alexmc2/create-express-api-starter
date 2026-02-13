@@ -2,8 +2,16 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import ejs from 'ejs';
 
-import { architectureLabel, databaseLabel, languageLabel } from '../core/labels.js';
-import type { GenerationPlan, PlannedFile, TemplateConfig } from '../core/types.js';
+import {
+  architectureLabel,
+  databaseLabel,
+  languageLabel,
+} from '../core/labels.js';
+import type {
+  GenerationPlan,
+  PlannedFile,
+  TemplateConfig,
+} from '../core/types.js';
 import { resolveTemplatesDir } from '../utils/paths.js';
 
 interface GenerateProjectInput {
@@ -21,7 +29,9 @@ function isEjsTemplate(relativePath: string): boolean {
 }
 
 function stripEjsSuffix(relativePath: string): string {
-  return relativePath.endsWith('.ejs') ? relativePath.slice(0, -'.ejs'.length) : relativePath;
+  return relativePath.endsWith('.ejs')
+    ? relativePath.slice(0, -'.ejs'.length)
+    : relativePath;
 }
 
 function resolveTemplateRoot(config: TemplateConfig): string {
@@ -29,9 +39,12 @@ function resolveTemplateRoot(config: TemplateConfig): string {
   return path.join(templatesDir, config.language, config.architecture);
 }
 
-async function listFilesRecursive(directory: string, baseDir: string = directory): Promise<string[]> {
+async function listFilesRecursive(
+  directory: string,
+  baseDir: string = directory,
+): Promise<string[]> {
   const entries = await fs.readdir(directory, {
-    withFileTypes: true
+    withFileTypes: true,
   });
 
   const sortedEntries = entries.sort((a, b) => a.name.localeCompare(b.name));
@@ -52,13 +65,20 @@ async function listFilesRecursive(directory: string, baseDir: string = directory
   return results;
 }
 
-function shouldIncludeTemplate(relativePath: string, config: TemplateConfig): boolean {
+function shouldIncludeTemplate(
+  relativePath: string,
+  config: TemplateConfig,
+): boolean {
   if (relativePath === 'compose.yaml.ejs') {
     return config.databaseMode === 'postgres-docker';
   }
 
+  if (relativePath === 'scripts/dbCreate.js.ejs') {
+    return config.databaseMode === 'postgres-psql';
+  }
+
   if (relativePath.startsWith('scripts/')) {
-    return config.databaseMode === 'postgres-docker';
+    return config.databaseMode !== 'memory';
   }
 
   if (relativePath.startsWith('db/')) {
@@ -76,7 +96,7 @@ function toPlannedFile(relativeTemplatePath: string): PlannedFile {
   return {
     templateRelativePath: relativeTemplatePath,
     outputRelativePath: stripEjsSuffix(relativeTemplatePath),
-    isTemplate: isEjsTemplate(relativeTemplatePath)
+    isTemplate: isEjsTemplate(relativeTemplatePath),
   };
 }
 
@@ -111,7 +131,7 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     databaseUrl:
       config.databaseMode === 'postgres-docker'
         ? 'postgres://postgres:postgres@localhost:5433/my_api_dev'
-        : 'postgres://localhost:5432/my_api_dev'
+        : 'postgres://localhost:5432/my_api_dev',
   };
 }
 
@@ -119,7 +139,10 @@ function fromPosixPath(relativePath: string): string {
   return relativePath.split('/').join(path.sep);
 }
 
-export async function planProject(config: TemplateConfig, targetDir: string): Promise<GenerationPlan> {
+export async function planProject(
+  config: TemplateConfig,
+  targetDir: string,
+): Promise<GenerationPlan> {
   const templateRoot = resolveTemplateRoot(config);
   const templateRootExists = await fs.pathExists(templateRoot);
 
@@ -136,15 +159,18 @@ export async function planProject(config: TemplateConfig, targetDir: string): Pr
 
   return {
     targetDir,
-    actions: [`Create project directory: ${targetDir}`, `Write ${files.length} files`],
-    files
+    actions: [
+      `Create project directory: ${targetDir}`,
+      `Write ${files.length} files`,
+    ],
+    files,
   };
 }
 
 export async function generateProject({
   config,
   targetDir,
-  dryRun = false
+  dryRun = false,
 }: GenerateProjectInput): Promise<GenerationPlan> {
   const templateRoot = resolveTemplateRoot(config);
   const plan = await planProject(config, targetDir);
@@ -158,8 +184,14 @@ export async function generateProject({
   const data = templateData(config);
 
   for (const file of plan.files) {
-    const sourcePath = path.join(templateRoot, fromPosixPath(file.templateRelativePath));
-    const destinationPath = path.join(targetDir, fromPosixPath(file.outputRelativePath));
+    const sourcePath = path.join(
+      templateRoot,
+      fromPosixPath(file.templateRelativePath),
+    );
+    const destinationPath = path.join(
+      targetDir,
+      fromPosixPath(file.outputRelativePath),
+    );
 
     await fs.ensureDir(path.dirname(destinationPath));
 

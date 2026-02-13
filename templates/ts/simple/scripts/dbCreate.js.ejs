@@ -1,0 +1,54 @@
+require('dotenv').config();
+
+const { Pool } = require('pg');
+
+async function run() {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (!databaseUrl) {
+    console.error('Error: DATABASE_URL is not set.');
+    console.error('Make sure you have a .env file with DATABASE_URL defined.');
+    console.error('You can copy .env.example to .env to get started.');
+    process.exit(1);
+  }
+
+  // Parse the database name from the connection string.
+  const url = new URL(databaseUrl);
+  const dbName = url.pathname.slice(1);
+
+  if (!dbName) {
+    console.error('Error: DATABASE_URL does not contain a database name.');
+    process.exit(1);
+  }
+
+  // Connect to the default "postgres" database to create the target database.
+  url.pathname = '/postgres';
+  const pool = new Pool({ connectionString: url.toString() });
+
+  try {
+    const result = await pool.query(
+      'SELECT 1 FROM pg_database WHERE datname = $1',
+      [dbName]
+    );
+
+    if (result.rows.length > 0) {
+      console.log(`Database "${dbName}" already exists.`);
+      return;
+    }
+
+    await pool.query(`CREATE DATABASE "${dbName}"`);
+    console.log(`Database "${dbName}" created.`);
+  } finally {
+    await pool.end();
+  }
+}
+
+run().catch((error) => {
+  console.error('Failed to create database:', error.message);
+  console.error('');
+  console.error('Common fixes:');
+  console.error('  - Make sure PostgreSQL is running');
+  console.error('  - Check that your user has permission to create databases');
+  console.error('  - Verify DATABASE_URL in your .env file is correct');
+  process.exit(1);
+});

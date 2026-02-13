@@ -21,9 +21,9 @@ function run(command, args) {
 }
 
 async function main() {
-  await run('npm', ['run', 'db:down']);
+<% if (isDocker) { %>  await run('npm', ['run', 'db:down']);
   await run('npm', ['run', 'db:up']);
-  await run('npm', ['run', 'db:setup']);
+<% } %>  await run('npm', ['run', 'db:setup']);
   await run('npm', ['run', 'db:seed']);
 }
 

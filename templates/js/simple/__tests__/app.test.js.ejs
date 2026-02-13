@@ -3,8 +3,21 @@
 <% } %>const request = require('supertest');
 
 const app = require('../src/app');
+<% if (isPostgres) { %>const pool = require('../src/db/pool');
+<% } %>
+<% if (isPostgres) { %>afterAll(async () => {
+  await pool.end();
+});
 
-describe('API', () => {
+<% } %>describe('API', () => {
+  test('GET / returns API info', async () => {
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('API is running');
+    expect(response.body.endpoints).toBeDefined();
+  });
+
   test('GET /health returns { ok: true }', async () => {
     const response = await request(app).get('/health');
 
