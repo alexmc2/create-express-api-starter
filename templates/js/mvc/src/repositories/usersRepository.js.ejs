@@ -1,5 +1,5 @@
 <% if (isPostgres) { %><% if (educational) { %>// The repository isolates all database queries in one place.
-// Route handlers call these functions instead of writing SQL directly.
+// Controllers call these functions instead of writing SQL directly.
 <% } %>const pool = require('../db/pool');
 
 async function getAll() {
@@ -21,7 +21,7 @@ module.exports = {
   getAll,
   create
 };
-<% } else { %><% if (educational) { %>// The repository layer keeps data access separate from business logic.
+<% } else { %><% if (educational) { %>// The repository layer keeps data access separate from route logic.
 // This in-memory version stores data in an array — swap it for a real
 // database later by changing only this file.
 <% } %>const users = [

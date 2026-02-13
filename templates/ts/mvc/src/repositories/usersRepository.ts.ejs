@@ -1,5 +1,5 @@
 <% if (isPostgres) { %><% if (educational) { %>// The repository isolates all database queries in one place.
-// Route handlers call these functions instead of writing SQL directly.
+// Controllers call these functions instead of writing SQL directly.
 <% } %>import pool from '../db/pool';
 
 interface UserRow {
