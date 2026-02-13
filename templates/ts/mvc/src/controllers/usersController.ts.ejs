@@ -2,12 +2,15 @@ import type { RequestHandler } from 'express';
 
 import usersService from '../services/usersService';
 
-const listUsers: RequestHandler = async (_req, res, next) => {
+<% if (educational) { %>// Controllers handle HTTP concerns (req, res, status codes) and delegate
+// business logic to the service layer. This keeps each layer focused.
+<% } %>const listUsers: RequestHandler = async (_req, res, next) => {
   try {
     const users = await usersService.listUsers();
     res.status(200).json(users);
   } catch (error) {
-    next(error);
+<% if (educational) { %>    // Forward errors to Express's error-handling middleware.
+<% } %>    next(error);
   }
 };
 

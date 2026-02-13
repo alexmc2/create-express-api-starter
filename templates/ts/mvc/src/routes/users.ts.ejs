@@ -4,7 +4,9 @@ import usersController from '../controllers/usersController';
 
 const router = Router();
 
-router.get('/', usersController.listUsers);
+<% if (educational) { %>// Routes only define URL-to-controller mappings — no business logic here.
+// This keeps route files short and makes it easy to see the full API at a glance.
+<% } %>router.get('/', usersController.listUsers);
 router.post('/', usersController.createUser);
 
 export default router;

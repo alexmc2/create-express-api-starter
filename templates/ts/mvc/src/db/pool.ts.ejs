@@ -1,4 +1,6 @@
-import { Pool } from 'pg';
+<% if (educational) { %>// Create a connection pool so the app reuses database connections
+// instead of opening a new one for every query.
+<% } %>import { Pool } from 'pg';
 
 const databaseUrl = process.env.DATABASE_URL;
 

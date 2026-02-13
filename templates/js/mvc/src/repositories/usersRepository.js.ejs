@@ -1,4 +1,6 @@
-<% if (isPostgres) { %>const pool = require('../db/pool');
+<% if (isPostgres) { %><% if (educational) { %>// The repository isolates all database queries in one place.
+// Controllers call these functions instead of writing SQL directly.
+<% } %>const pool = require('../db/pool');
 
 async function getAll() {
   const result = await pool.query('SELECT id, name, email FROM users ORDER BY id ASC');
@@ -6,7 +8,8 @@ async function getAll() {
 }
 
 async function create({ name, email }) {
-  const result = await pool.query(
+<% if (educational) { %>  // Use parameterised queries ($1, $2) to prevent SQL injection.
+<% } %>  const result = await pool.query(
     'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email',
     [name, email]
   );
@@ -18,7 +21,10 @@ module.exports = {
   getAll,
   create
 };
-<% } else { %>const users = [
+<% } else { %><% if (educational) { %>// The repository layer keeps data access separate from route logic.
+// This in-memory version stores data in an array — swap it for a real
+// database later by changing only this file.
+<% } %>const users = [
   {
     id: 1,
     name: 'Ada Lovelace',

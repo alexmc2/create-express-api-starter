@@ -1,9 +1,12 @@
-import 'dotenv/config';
+<% if (educational) { %>// Load environment variables from .env into process.env before anything else runs.
+<% } %>import 'dotenv/config';
 
 import app from './app';
 
-const port = Number(process.env.PORT) || 3000;
+<% if (educational) { %>// Use the PORT from .env if set, otherwise default to 3000.
+<% } %>const port = Number(process.env.PORT) || 3000;
 
-app.listen(port, () => {
+<% if (educational) { %>// Start listening for incoming HTTP requests.
+<% } %>app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

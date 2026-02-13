@@ -4,7 +4,9 @@ interface HttpError extends Error {
   status?: number;
 }
 
-const errorHandler: ErrorRequestHandler = (error: HttpError, _req, res, _next) => {
+<% if (educational) { %>// Express recognises this as an error handler because it has four parameters.
+// Any error passed to next(error) anywhere in the app ends up here.
+<% } %>const errorHandler: ErrorRequestHandler = (error: HttpError, _req, res, _next) => {
   const status = Number.isInteger(error?.status) ? (error.status as number) : 500;
   const message = typeof error?.message === 'string' ? error.message : 'Internal server error.';
 
@@ -17,7 +19,9 @@ const errorHandler: ErrorRequestHandler = (error: HttpError, _req, res, _next) =
     message
   };
 
-  if (process.env.NODE_ENV === 'development' && typeof error?.stack === 'string') {
+<% if (educational) { %>  // Include the stack trace in development for easier debugging,
+  // but hide it in production to avoid leaking internal details.
+<% } %>  if (process.env.NODE_ENV === 'development' && typeof error?.stack === 'string') {
     payload.stack = error.stack;
   }
 
