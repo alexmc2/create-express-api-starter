@@ -1,0 +1,49 @@
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const { Pool } = require('pg');
+
+const RETRIES = 20;
+const RETRY_DELAY_MS = 1000;
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForDatabase(pool) {
+  for (let attempt = 1; attempt <= RETRIES; attempt += 1) {
+    try {
+      await pool.query('SELECT 1');
+      return;
+    } catch {
+      console.log('Waiting for database...');
+      await sleep(RETRY_DELAY_MS);
+    }
+  }
+
+  throw new Error('Unable to connect to database after 20 retries.');
+}
+
+async function run() {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL is required.');
+  }
+
+  const pool = new Pool({ connectionString: databaseUrl });
+
+  try {
+    await waitForDatabase(pool);
+    const schemaPath = path.join(process.cwd(), 'db', 'schema.sql');
+    const schemaSql = await fs.readFile(schemaPath, 'utf8');
+    await pool.query(schemaSql);
+    console.log('Database schema applied.');
+  } finally {
+    await pool.end();
+  }
+}
+
+run().catch((error) => {
+  console.error(error.message);
+  process.exit(1);
+});

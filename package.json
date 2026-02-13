@@ -1,0 +1,40 @@
+{
+  "name": "@alexmc2/create-express-api-starter",
+  "version": "0.1.0",
+  "description": "Interactive CLI to scaffold API-first Express backend projects",
+  "type": "module",
+  "bin": {
+    "create-express-api-starter": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx src/cli/index.ts",
+    "build": "tsup",
+    "test": "vitest run",
+    "pack": "npm pack"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.10.1",
+    "ejs": "^3.1.10",
+    "execa": "^9.5.2",
+    "fs-extra": "^11.2.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.17.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

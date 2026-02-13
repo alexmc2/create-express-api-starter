@@ -1,0 +1,26 @@
+const usersRepository = require('../repositories/usersRepository');
+
+async function listUsers() {
+  return usersRepository.getAll();
+}
+
+async function createUser(payload) {
+  const { name, email } = payload;
+
+  if (!name || typeof name !== 'string') {
+    throw {
+      status: 400,
+      message: '"name" is required.'
+    };
+  }
+
+  return usersRepository.create({
+    name: name.trim(),
+    email: typeof email === 'string' ? email.trim() : null
+  });
+}
+
+module.exports = {
+  listUsers,
+  createUser
+};

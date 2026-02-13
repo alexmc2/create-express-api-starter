@@ -1,0 +1,17 @@
+function errorHandler(error, _req, res, _next) {
+  const status = Number.isInteger(error?.status) ? error.status : 500;
+  const message = typeof error?.message === 'string' ? error.message : 'Internal server error.';
+
+  const payload = {
+    status,
+    message
+  };
+
+  if (process.env.NODE_ENV === 'development' && typeof error?.stack === 'string') {
+    payload.stack = error.stack;
+  }
+
+  res.status(status).json(payload);
+}
+
+module.exports = errorHandler;

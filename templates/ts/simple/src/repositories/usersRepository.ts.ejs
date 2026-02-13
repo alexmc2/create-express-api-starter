@@ -1,0 +1,79 @@
+<% if (isPostgres) { %>import pool from '../db/pool';
+
+interface UserRow {
+  id: number;
+  name: string;
+  email: string | null;
+}
+
+interface CreateUserInput {
+  name: string;
+  email: string | null;
+}
+
+async function getAll(): Promise<UserRow[]> {
+  const result = await pool.query<UserRow>('SELECT id, name, email FROM users ORDER BY id ASC');
+  return result.rows;
+}
+
+async function create({ name, email }: CreateUserInput): Promise<UserRow> {
+  const result = await pool.query<UserRow>(
+    'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email',
+    [name, email]
+  );
+
+  return result.rows[0];
+}
+
+export default {
+  getAll,
+  create
+};
+<% } else { %>export interface User {
+  id: number;
+  name: string;
+  email: string | null;
+}
+
+interface CreateUserInput {
+  name: string;
+  email: string | null;
+}
+
+const users: User[] = [
+  {
+    id: 1,
+    name: 'Ada Lovelace',
+    email: 'ada@example.com'
+  },
+  {
+    id: 2,
+    name: 'Grace Hopper',
+    email: 'grace@example.com'
+  }
+];
+
+let nextId = users.length + 1;
+
+async function getAll(): Promise<User[]> {
+  return users;
+}
+
+async function create({ name, email }: CreateUserInput): Promise<User> {
+  const user: User = {
+    id: nextId,
+    name,
+    email
+  };
+
+  nextId += 1;
+  users.push(user);
+
+  return user;
+}
+
+export default {
+  getAll,
+  create
+};
+<% } %>

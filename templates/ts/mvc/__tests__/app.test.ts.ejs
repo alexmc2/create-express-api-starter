@@ -1,0 +1,19 @@
+import request from 'supertest';
+
+import app from '../src/app';
+
+describe('API', () => {
+  test('GET /health returns { ok: true }', async () => {
+    const response = await request(app).get('/health');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ ok: true });
+  });
+
+  test('GET /api/users returns an array', async () => {
+    const response = await request(app).get('/api/users');
+
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+});

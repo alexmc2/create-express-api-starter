@@ -1,0 +1,28 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
+const healthRouter = require('./routes/health');
+const usersRouter = require('./routes/users');
+const notFound = require('./middleware/notFound');
+const errorHandler = require('./middleware/errorHandler');
+
+const app = express();
+
+<% if (educational) { %>// Parse JSON request bodies so route handlers can read req.body.
+<% } %>app.use(express.json());
+<% if (educational) { %>// Allow API access from browsers running on other origins during development.
+<% } %>app.use(cors());
+<% if (educational) { %>// Apply common security headers with sensible defaults.
+<% } %>app.use(helmet());
+<% if (educational) { %>// Log incoming requests in a concise format for local debugging.
+<% } %>app.use(morgan('dev'));
+
+app.use('/health', healthRouter);
+app.use('/api/users', usersRouter);
+
+app.use(notFound);
+app.use(errorHandler);
+
+module.exports = app;

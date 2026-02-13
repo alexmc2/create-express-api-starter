@@ -1,0 +1,57 @@
+<% if (isPostgres) { %>const pool = require('../db/pool');
+
+async function getAll() {
+  const result = await pool.query('SELECT id, name, email FROM users ORDER BY id ASC');
+  return result.rows;
+}
+
+async function create({ name, email }) {
+  const result = await pool.query(
+    'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email',
+    [name, email]
+  );
+
+  return result.rows[0];
+}
+
+module.exports = {
+  getAll,
+  create
+};
+<% } else { %>const users = [
+  {
+    id: 1,
+    name: 'Ada Lovelace',
+    email: 'ada@example.com'
+  },
+  {
+    id: 2,
+    name: 'Grace Hopper',
+    email: 'grace@example.com'
+  }
+];
+
+let nextId = users.length + 1;
+
+async function getAll() {
+  return users;
+}
+
+async function create({ name, email }) {
+  const user = {
+    id: nextId,
+    name,
+    email
+  };
+
+  nextId += 1;
+  users.push(user);
+
+  return user;
+}
+
+module.exports = {
+  getAll,
+  create
+};
+<% } %>

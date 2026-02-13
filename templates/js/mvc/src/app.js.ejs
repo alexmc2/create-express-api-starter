@@ -1,0 +1,28 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
+const healthRouter = require('./routes/health');
+const usersRouter = require('./routes/users');
+const notFound = require('./middleware/notFound');
+const errorHandler = require('./middleware/errorHandler');
+
+const app = express();
+
+<% if (educational) { %>// Parse JSON request bodies so route handlers can access req.body.
+<% } %>app.use(express.json());
+<% if (educational) { %>// Enable CORS for local client/server development workflows.
+<% } %>app.use(cors());
+<% if (educational) { %>// Add secure HTTP headers by default.
+<% } %>app.use(helmet());
+<% if (educational) { %>// Log requests in development-friendly format.
+<% } %>app.use(morgan('dev'));
+
+app.use('/health', healthRouter);
+app.use('/api/users', usersRouter);
+
+app.use(notFound);
+app.use(errorHandler);
+
+module.exports = app;

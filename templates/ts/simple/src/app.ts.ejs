@@ -1,0 +1,28 @@
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import morgan from 'morgan';
+
+import errorHandler from './middleware/errorHandler';
+import notFound from './middleware/notFound';
+import healthRouter from './routes/health';
+import usersRouter from './routes/users';
+
+const app = express();
+
+<% if (educational) { %>// Parse JSON request bodies so route handlers can access req.body.
+<% } %>app.use(express.json());
+<% if (educational) { %>// Enable CORS for local client/server development workflows.
+<% } %>app.use(cors());
+<% if (educational) { %>// Add secure HTTP headers by default.
+<% } %>app.use(helmet());
+<% if (educational) { %>// Log requests in development-friendly format.
+<% } %>app.use(morgan('dev'));
+
+app.use('/health', healthRouter);
+app.use('/api/users', usersRouter);
+
+app.use(notFound);
+app.use(errorHandler);
+
+export default app;
