@@ -1,5 +1,4 @@
 # @alexmc2/create-express-api-starter
-
 **🚧 Work in progress** - this package is under active development and not yet been published to npm.
 
 A modern scaffolding CLI that generates production-ready Express API projects with sensible defaults. Designed to get beginners up and running quickly while teaching best practices through well-structured code and educational comments.
@@ -67,23 +66,23 @@ Your API is live at `http://localhost:3000`. Hit `http://localhost:3000/health` 
 
 The CLI walks you through these choices interactively, or you can skip them all with `--yes` to accept defaults.
 
-| Option                   | Choices                                       | Default    |
-| ------------------------ | --------------------------------------------- | ---------- |
-| **Language**             | JavaScript, TypeScript                        | JavaScript |
-| **Architecture**         | Simple (flat), MVC (layered)                  | Simple     |
-| **Database**             | In-memory, Postgres (psql), Postgres (Docker) | In-memory  |
-| **Educational comments** | On, Off                                       | On         |
-| **Install dependencies** | Yes, No                                       | Yes        |
-| **Initialise git repo**  | Yes, No                                       | Yes        |
+| Option | Choices | Default |
+|---|---|---|
+| **Language** | JavaScript, TypeScript | JavaScript |
+| **Architecture** | Simple (flat), MVC (layered) | Simple |
+| **Database** | In-memory, Postgres (psql), Postgres (Docker) | In-memory |
+| **Educational comments** | On, Off | On |
+| **Install dependencies** | Yes, No | Yes |
+| **Initialise git repo** | Yes, No | Yes |
 
 ### Flags
 
-| Flag           | Effect                                          |
-| -------------- | ----------------------------------------------- |
-| `--yes`        | Accept all defaults, skip prompts               |
-| `--dry-run`    | Print the generation plan without writing files |
-| `--no-install` | Skip `npm install` after generation             |
-| `--no-git`     | Skip `git init` after generation                |
+| Flag | Effect |
+|---|---|
+| `--yes` | Accept all defaults, skip prompts |
+| `--dry-run` | Print the generation plan without writing files |
+| `--no-install` | Skip `npm install` after generation |
+| `--no-git` | Skip `git init` after generation |
 
 ## What gets generated
 
@@ -97,8 +96,6 @@ my-api/
 │   ├── routes/
 │   │   ├── health.js       # GET /health
 │   │   └── users.js        # GET & POST /api/users
-│   ├── errors/
-│   │   └── AppError.js     # Custom error class with status codes
 │   └── middleware/
 │       ├── notFound.js     # 404 handler
 │       └── errorHandler.js # Centralised error handler
@@ -140,20 +137,20 @@ In development mode, a `stack` trace is included for debugging. In production, i
 
 **JavaScript projects:**
 
-| Script        | Command                      | Purpose                      |
-| ------------- | ---------------------------- | ---------------------------- |
+| Script | Command | Purpose |
+|---|---|---|
 | `npm run dev` | `node --watch src/server.js` | Dev server with auto-restart |
-| `npm start`   | `node src/server.js`         | Production start             |
-| `npm test`    | `jest`                       | Run test suite               |
+| `npm start` | `node src/server.js` | Production start |
+| `npm test` | `jest` | Run test suite |
 
 **TypeScript projects:**
 
-| Script          | Command                   | Purpose                      |
-| --------------- | ------------------------- | ---------------------------- |
-| `npm run dev`   | `tsx watch src/server.ts` | Dev server with auto-restart |
-| `npm run build` | `tsc`                     | Compile to JavaScript        |
-| `npm start`     | `node dist/server.js`     | Production start (compiled)  |
-| `npm test`      | `jest`                    | Run test suite               |
+| Script | Command | Purpose |
+|---|---|---|
+| `npm run dev` | `tsx watch src/server.ts` | Dev server with auto-restart |
+| `npm run build` | `tsc` | Compile to JavaScript |
+| `npm start` | `node dist/server.js` | Production start (compiled) |
+| `npm test` | `jest` | Run test suite |
 
 ### Tests
 
@@ -205,7 +202,7 @@ npm run db:down     # Stop and remove container + data
 
 ## Educational comments
 
-When enabled (the default), the generated code includes short inline comments explaining _why_ things are done a certain way:
+When enabled (the default), the generated code includes short inline comments explaining *why* things are done a certain way:
 
 ```javascript
 // Parse incoming JSON request bodies so req.body is available

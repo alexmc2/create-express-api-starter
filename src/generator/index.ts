@@ -1,4 +1,5 @@
 import path from 'node:path';
+import os from 'node:os';
 import fs from 'fs-extra';
 import ejs from 'ejs';
 
@@ -131,7 +132,8 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     databaseUrl:
       config.databaseMode === 'postgres-docker'
         ? 'postgres://postgres:postgres@localhost:5433/my_api_dev'
-        : 'postgres://localhost:5432/my_api_dev',
+        : `postgres://${os.userInfo().username}:postgres@localhost:5432/my_api_dev`,
+    osUsername: os.userInfo().username,
   };
 }
 

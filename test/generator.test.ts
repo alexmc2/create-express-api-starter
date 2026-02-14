@@ -16,7 +16,7 @@ const jsSimpleMemory: TemplateConfig = {
   language: 'js',
   architecture: 'simple',
   educational: true,
-  databaseMode: 'memory'
+  databaseMode: 'memory',
 };
 
 describe('generator', () => {
@@ -34,7 +34,7 @@ describe('generator', () => {
         'README.md',
         '__tests__/app.test.js',
         '.env.example',
-        '.gitignore'
+        '.gitignore',
       ];
 
       for (const file of expectedFiles) {
@@ -57,9 +57,9 @@ describe('generator', () => {
           language: 'ts',
           architecture: 'mvc',
           educational: false,
-          databaseMode: 'postgres-docker'
+          databaseMode: 'postgres-docker',
         },
-        targetDir
+        targetDir,
       });
 
       const packageJsonPath = path.join(targetDir, 'package.json');
@@ -73,7 +73,10 @@ describe('generator', () => {
       expect(packageJson.devDependencies['@swc/jest']).toBeDefined();
       expect(packageJson.devDependencies['@swc/core']).toBeDefined();
 
-      const readme = await fs.readFile(path.join(targetDir, 'README.md'), 'utf8');
+      const readme = await fs.readFile(
+        path.join(targetDir, 'README.md'),
+        'utf8',
+      );
       expect(readme).toContain('Language: TypeScript');
       expect(readme).toContain('Architecture: MVC');
       expect(readme).toContain('Database: Postgres (Docker)');
@@ -85,10 +88,70 @@ describe('generator', () => {
       expect(tsconfig.compilerOptions.outDir).toBe('./dist');
       expect(tsconfig.compilerOptions.rootDir).toBe('./src');
 
-      expect(await fs.pathExists(path.join(targetDir, 'compose.yaml'))).toBe(true);
-      expect(await fs.pathExists(path.join(targetDir, 'scripts/dbSetup.js'))).toBe(true);
-      expect(await fs.pathExists(path.join(targetDir, 'scripts/dbSeed.js'))).toBe(true);
-      expect(await fs.pathExists(path.join(targetDir, 'scripts/dbReset.js'))).toBe(true);
+      expect(await fs.pathExists(path.join(targetDir, 'compose.yaml'))).toBe(
+        true,
+      );
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbSetup.js')),
+      ).toBe(true);
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbSeed.js')),
+      ).toBe(true);
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbReset.js')),
+      ).toBe(true);
+    } finally {
+      await fs.remove(root);
+    }
+  });
+
+  it('renders JS simple postgres-psql project with osUsername in README and .env', async () => {
+    const root = await createTempRoot('create-express-api-starter-');
+    const targetDir = path.join(root, 'my-api-psql');
+
+    try {
+      await generateProject({
+        config: {
+          projectName: 'my-api-psql',
+          language: 'js',
+          architecture: 'simple',
+          educational: true,
+          databaseMode: 'postgres-psql',
+        },
+        targetDir,
+      });
+
+      const expectedUsername = os.userInfo().username;
+
+      const readme = await fs.readFile(
+        path.join(targetDir, 'README.md'),
+        'utf8',
+      );
+      expect(readme).toContain('Database: Postgres (psql)');
+      expect(readme).toContain(`connects as \`${expectedUsername}\``);
+      expect(readme).toContain('Prerequisites');
+      expect(readme).toContain('Set up your database role');
+
+      const envExample = await fs.readFile(
+        path.join(targetDir, '.env.example'),
+        'utf8',
+      );
+      expect(envExample).toContain(
+        `postgres://${expectedUsername}:postgres@localhost:5432/my_api_dev`,
+      );
+
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbCreate.js')),
+      ).toBe(true);
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbSetup.js')),
+      ).toBe(true);
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbSeed.js')),
+      ).toBe(true);
+      expect(
+        await fs.pathExists(path.join(targetDir, 'scripts/dbReset.js')),
+      ).toBe(true);
     } finally {
       await fs.remove(root);
     }
@@ -105,17 +168,24 @@ describe('generator', () => {
           language: 'js',
           architecture: 'mvc',
           educational: true,
-          databaseMode: 'memory'
+          databaseMode: 'memory',
         },
         targetDir,
-        dryRun: true
+        dryRun: true,
       });
 
       expect(plan.files.length).toBeGreaterThan(0);
       expect(await fs.pathExists(targetDir)).toBe(false);
 
-      const explicitPlan = await planProject(jsSimpleMemory, path.join(root, 'another-api'));
-      expect(explicitPlan.files.some((file) => file.outputRelativePath === 'package.json')).toBe(true);
+      const explicitPlan = await planProject(
+        jsSimpleMemory,
+        path.join(root, 'another-api'),
+      );
+      expect(
+        explicitPlan.files.some(
+          (file) => file.outputRelativePath === 'package.json',
+        ),
+      ).toBe(true);
     } finally {
       await fs.remove(root);
     }

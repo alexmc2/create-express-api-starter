@@ -31,48 +31,38 @@ export function printDryRunPlan(
 
 export function printNextSteps(selection: UserSelections): void {
   console.log(pc.bold('\nNext steps'));
-  console.log(`1. cd ${selection.projectName}`);
-
-  let stepNumber = 2;
+  console.log(`  cd ${selection.projectName}`);
 
   if (!selection.installDeps) {
-    console.log(`${stepNumber}. npm install --no-audit --no-fund`);
-    stepNumber += 1;
+    console.log('  npm install');
   }
 
   if (selection.databaseMode === 'postgres-psql') {
+    console.log('  cp .env.example .env    # then set DATABASE_URL if needed');
+    console.log('  npm run db:create');
+    console.log('  npm run db:setup');
+    console.log('  npm run db:seed');
+    console.log('');
     console.log(
-      `${stepNumber}. Copy .env.example to .env and set DATABASE_URL if needed`,
+      pc.dim('  New to Postgres? Check the README for setup instructions.'),
     );
-    stepNumber += 1;
-    console.log(`${stepNumber}. npm run db:create`);
-    stepNumber += 1;
-    console.log(`${stepNumber}. npm run db:setup`);
-    stepNumber += 1;
-    console.log(`${stepNumber}. npm run db:seed`);
-    stepNumber += 1;
+    console.log('');
   }
 
   if (selection.databaseMode === 'postgres-docker') {
-    console.log(`${stepNumber}. Copy .env.example to .env`);
-    stepNumber += 1;
-    console.log(`${stepNumber}. npm run db:up`);
-    stepNumber += 1;
-    console.log(`${stepNumber}. npm run db:setup`);
-    stepNumber += 1;
-    console.log(`${stepNumber}. npm run db:seed`);
-    stepNumber += 1;
+    console.log('  cp .env.example .env');
+    console.log('  npm run db:up');
+    console.log('  npm run db:setup');
+    console.log('  npm run db:seed');
   }
 
-  console.log(`${stepNumber}. npm run dev`);
-  stepNumber += 1;
+  console.log('  npm run dev');
 
   if (selection.language === 'ts') {
-    console.log(`${stepNumber}. npm run build`);
-    stepNumber += 1;
+    console.log('  npm run build');
   }
 
-  console.log(`${stepNumber}. npm test`);
+  console.log('  npm test');
 }
 
 export function formatTargetPath(targetDir: string): string {

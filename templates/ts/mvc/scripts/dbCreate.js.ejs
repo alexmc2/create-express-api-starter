@@ -46,9 +46,21 @@ async function run() {
 run().catch((error) => {
   console.error('Failed to create database:', error.message);
   console.error('');
-  console.error('Common fixes:');
-  console.error('  - Make sure PostgreSQL is running');
-  console.error('  - Check that your user has permission to create databases');
-  console.error('  - Verify DATABASE_URL in your .env file is correct');
+
+  if (error.message.includes('password') || error.message.includes('SCRAM')) {
+    console.error('Your DATABASE_URL is missing credentials or the password is wrong.');
+    console.error('Update DATABASE_URL in your .env file:');
+    console.error('  DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/my_api_dev');
+  } else if (error.message.includes('ECONNREFUSED')) {
+    console.error('PostgreSQL is not running. Start it first:');
+    console.error('  Linux:  sudo systemctl start postgresql');
+    console.error('  macOS:  brew services start postgresql');
+  } else {
+    console.error('Common fixes:');
+    console.error('  - Make sure PostgreSQL is running');
+    console.error('  - Check that your user has permission to create databases');
+    console.error('  - Verify DATABASE_URL in your .env file is correct');
+  }
+
   process.exit(1);
 });
