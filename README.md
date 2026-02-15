@@ -13,9 +13,7 @@ npx @alexmc2/create-express-api-starter my-api
 
 Express is intentionally unopinionated. That's a strength for experienced developers, but it means every new backend project starts with the same ritual: setting up folder structure, wiring middleware, writing error handlers, configuring a test runner, and figuring out how everything connects. Beginners lose hours to this before writing a single route.
 
-Frontend has solved this with `create-*` tools. Backend hasn't — not well, anyway. The Express ecosystem has plenty of starter repos and outdated generators, but very few modern, interactive scaffolders that get a beginner from zero to a working, tested API in minutes.
-
-This tool fills that gap.
+The Express ecosystem has plenty of starter repos and outdated generators, but very few modern, interactive scaffolders that get a beginner from zero to a working, tested API in minutes.
 
 ## What it does
 
@@ -34,15 +32,15 @@ The generated project is designed to be a **runway**: enough structure to get mo
 
 This is a two-layer system:
 
-1. **The CLI tool** (this package) — published to npm, contains the prompts, templates, and generation logic.
-2. **The generated project** — a standalone Express API created inside a new folder with its own `package.json`, dependencies, scripts, and tests.
+1. **The CLI tool** (this package) - published to npm, contains the prompts, templates, and generation logic.
+2. **The generated project** - a standalone Express API created inside a new folder with its own `package.json`, dependencies, scripts, and tests.
 
-When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the CLI temporarily and runs it. The CLI writes files into `my-api/` and optionally runs `npm install` inside that folder. The CLI doesn't "contain" Express — it generates a project that depends on Express.
+When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the CLI temporarily and runs it. The CLI writes files into `my-api/` and optionally runs `npm install` inside that folder. The CLI doesn't "contain" Express - it generates a project that depends on Express.
 
 ## Quick start
 
 ```bash
-# Interactive mode — answer a few questions
+# Interactive mode - answer a few questions
 npx @alexmc2/create-express-api-starter my-api
 
 # Accept all defaults (JavaScript, Simple architecture, In-memory DB)
@@ -114,11 +112,11 @@ MVC architecture adds `controllers/`, `services/`, and `repositories/` directori
 
 Every generated project includes these middleware out of the box:
 
-- **express.json()** — parses JSON request bodies
-- **cors** — enables cross-origin requests
-- **helmet** — sets security-related HTTP headers
-- **morgan** — logs HTTP requests in dev format
-- **dotenv** — loads environment variables from `.env`
+- **express.json()** - parses JSON request bodies
+- **cors** - enables cross-origin requests
+- **helmet** - sets security-related HTTP headers
+- **morgan** - logs HTTP requests in dev format
+- **dotenv** - loads environment variables from `.env`
 
 ### Error handling
 
@@ -160,7 +158,7 @@ Every generated project includes a working test suite using **Jest** and **Super
 
 ### In-memory (default)
 
-Data is stored in a plain JavaScript array. No database required — the project runs instantly. Data resets when the server restarts.
+Data is stored in a plain JavaScript array. No database required - the project runs instantly. Data resets when the server restarts.
 
 This is ideal for learning, prototyping, and understanding the project structure before adding a real database. The code is structured with a repository layer, so swapping in a real database later is straightforward.
 
@@ -186,7 +184,7 @@ npm run dev         # Start the server
 For developers who have Docker but don't want to install PostgreSQL directly. The generated project includes:
 
 - A `compose.yaml` that runs PostgreSQL in a container (port 5433 to avoid conflicts)
-- Node-based setup scripts that apply schema and seed data via the `pg` library — **no `psql` required on your machine**
+- Node-based setup scripts that apply schema and seed data via the `pg` library - **no `psql` required on your machine**
 - A built-in retry helper that waits for the database to be ready before running setup
 
 ```bash
@@ -208,7 +206,7 @@ When enabled (the default), the generated code includes short inline comments ex
 // Parse incoming JSON request bodies so req.body is available
 app.use(express.json());
 
-// Set security headers — protects against common web vulnerabilities
+// Set security headers - protects against common web vulnerabilities
 app.use(helmet());
 ```
 
@@ -221,7 +219,7 @@ These are designed to be helpful without being overwhelming. Turn them off if th
 Generated projects use `require()` / `module.exports` (JavaScript) or compile TypeScript to CommonJS output. This is a deliberate choice for v0.1:
 
 - Most Express tutorials and Stack Overflow answers use CommonJS patterns
-- Jest's ESM support is still experimental — CommonJS avoids that complexity entirely
+- Jest's ESM support is still experimental - CommonJS avoids that complexity entirely
 - Beginners don't need to debug ESM resolution issues on day one
 
 ### Opinionated but transparent
@@ -230,7 +228,7 @@ The tool makes choices for you (Jest, not Vitest; morgan, not pino; cors + helme
 
 ### Runway, not airport
 
-The scaffold gives you enough to start building immediately, but doesn't try to be a framework. No auth, no ORM, no migrations, no rate limiting, no Swagger — those are decisions you should make when you need them, not before.
+The scaffold gives you enough to start building immediately, but doesn't try to be a framework. No auth, no ORM, no migrations, no rate limiting, no Swagger - those are decisions you should make when you need them, not before.
 
 ## Technical details
 

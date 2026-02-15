@@ -112,11 +112,23 @@ function toPackageName(projectName: string): string {
   return cleaned || 'express-api';
 }
 
+function toDatabaseName(projectName: string): string {
+  const cleaned = projectName
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+/, '')
+    .replace(/_+$/, '');
+
+  return (cleaned || 'express_api') + '_dev';
+}
+
 function templateData(config: TemplateConfig): Record<string, unknown> {
   const isTypeScript = config.language === 'ts';
   const isPostgres = config.databaseMode !== 'memory';
   const isDocker = config.databaseMode === 'postgres-docker';
   const isPsql = config.databaseMode === 'postgres-psql';
+  const dbName = toDatabaseName(config.projectName);
 
   return {
     ...config,
@@ -125,14 +137,15 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     isDocker,
     isPsql,
     packageName: toPackageName(config.projectName),
+    databaseName: dbName,
     educationalLabel: config.educational ? 'On' : 'Off',
     languageLabel: languageLabel(config.language),
     architectureLabel: architectureLabel(config.architecture),
     databaseLabel: databaseLabel(config.databaseMode),
     databaseUrl:
       config.databaseMode === 'postgres-docker'
-        ? 'postgres://postgres:postgres@localhost:5433/my_api_dev'
-        : `postgres://${os.userInfo().username}:postgres@localhost:5432/my_api_dev`,
+        ? `postgres://postgres:postgres@localhost:5433/${dbName}`
+        : `postgres://${os.userInfo().username}:postgres@localhost:5432/${dbName}`,
     osUsername: os.userInfo().username,
   };
 }

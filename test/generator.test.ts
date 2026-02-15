@@ -137,7 +137,7 @@ describe('generator', () => {
         'utf8',
       );
       expect(envExample).toContain(
-        `postgres://${expectedUsername}:postgres@localhost:5432/my_api_dev`,
+        `postgres://${expectedUsername}:postgres@localhost:5432/my_api_psql_dev`,
       );
 
       expect(

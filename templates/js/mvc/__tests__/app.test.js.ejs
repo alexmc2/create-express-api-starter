@@ -31,4 +31,13 @@ const app = require('../src/app');
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
+
+  test('POST /api/users with missing name returns 400', async () => {
+    const response = await request(app)
+      .post('/api/users')
+      .send({ email: 'test@example.com' });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBeDefined();
+  });
 });

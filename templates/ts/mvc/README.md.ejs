@@ -89,7 +89,7 @@ sudo -u postgres psql -c "ALTER USER \"$USER\" WITH PASSWORD 'postgres';"
 **Windows**: The installer created a `postgres` role. Edit `DATABASE_URL` in your `.env` to use it:
 
 ```
-DATABASE_URL=postgres://postgres:YOUR_INSTALL_PASSWORD@localhost:5432/my_api_dev
+DATABASE_URL=postgres://postgres:YOUR_INSTALL_PASSWORD@localhost:5432/<%= databaseName %>
 ```
 
 ### 3. Verify
@@ -180,3 +180,5 @@ sudo -u postgres psql -c "ALTER USER \"$USER\" WITH PASSWORD 'postgres';"
 | `npm run db:seed` | Inserts sample data |
 | `npm run db:reset` | Stops container, restarts, re-applies schema + seed |
 <% } %>
+
+**"EADDRINUSE: address already in use"** — Another process is using port 3000. Check your other terminal windows for a running server and stop it with `Ctrl+C`.

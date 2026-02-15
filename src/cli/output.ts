@@ -38,15 +38,22 @@ export function printNextSteps(selection: UserSelections): void {
   }
 
   if (selection.databaseMode === 'postgres-psql') {
-    console.log('  cp .env.example .env    # then set DATABASE_URL if needed');
+    console.log('');
+    console.log(
+      pc.yellow('  ⚠  First-time Postgres setup (run once, then skip):'),
+    );
+    console.log('');
+    console.log(pc.dim('  # Create a Postgres role matching your OS user'));
+    console.log('  sudo -u postgres createuser --superuser "$USER"');
+    console.log(
+      `  sudo -u postgres psql -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
+    );
+    console.log('');
+    console.log(pc.bold('  Then run:'));
+    console.log('  cp .env.example .env');
     console.log('  npm run db:create');
     console.log('  npm run db:setup');
     console.log('  npm run db:seed');
-    console.log('');
-    console.log(
-      pc.dim('  New to Postgres? Check the README for setup instructions.'),
-    );
-    console.log('');
   }
 
   if (selection.databaseMode === 'postgres-docker') {
