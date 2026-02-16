@@ -136,8 +136,9 @@ describe('generator', () => {
         path.join(targetDir, '.env.example'),
         'utf8',
       );
+      const encodedUsername = encodeURIComponent(expectedUsername);
       expect(envExample).toContain(
-        `postgres://${expectedUsername}:postgres@localhost:5432/my_api_psql_dev`,
+        `postgres://${encodedUsername}:postgres@localhost:5432/my_api_psql_dev`,
       );
 
       expect(
