@@ -123,12 +123,21 @@ function toDatabaseName(projectName: string): string {
   return (cleaned || 'express_api') + '_dev';
 }
 
+function getOsUsername(): string {
+  try {
+    return os.userInfo().username;
+  } catch {
+    return process.env.USER ?? process.env.USERNAME ?? 'postgres';
+  }
+}
+
 function templateData(config: TemplateConfig): Record<string, unknown> {
   const isTypeScript = config.language === 'ts';
   const isPostgres = config.databaseMode !== 'memory';
   const isDocker = config.databaseMode === 'postgres-docker';
   const isPsql = config.databaseMode === 'postgres-psql';
   const dbName = toDatabaseName(config.projectName);
+  const username = isPostgres ? getOsUsername() : '';
 
   return {
     ...config,
@@ -145,8 +154,8 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     databaseUrl:
       config.databaseMode === 'postgres-docker'
         ? `postgres://postgres:postgres@localhost:5433/${dbName}`
-        : `postgres://${encodeURIComponent(os.userInfo().username)}:postgres@localhost:5432/${dbName}`,
-    osUsername: os.userInfo().username,
+        : `postgres://${encodeURIComponent(username)}:postgres@localhost:5432/${dbName}`,
+    osUsername: username,
   };
 }
 

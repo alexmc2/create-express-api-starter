@@ -41,12 +41,12 @@ export function printNextSteps(selection: UserSelections): void {
     console.log('');
     console.log(
       pc.yellow(
-        '  ⚠  First-time Postgres setup (Linux/macOS — run once, then skip):',
+        '  ⚠  First-time Postgres setup (Linux — run once, then skip):',
       ),
     );
     console.log('');
     console.log(pc.dim('  # Create a Postgres role matching your OS user'));
-    console.log('  sudo -u postgres createuser --superuser "$USER"');
+    console.log('  sudo -u postgres createuser --createdb "$USER"');
     console.log(
       `  sudo -u postgres psql -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
     );

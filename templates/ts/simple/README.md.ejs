@@ -76,11 +76,11 @@ Your `.env` file connects as `<%= osUsername %>` with password `postgres`. You n
 **Linux** (run once):
 
 ```sh
-sudo -u postgres createuser --superuser "$USER"
+sudo -u postgres createuser --createdb "$USER"
 sudo -u postgres psql -c "ALTER USER \"$USER\" WITH PASSWORD 'postgres';"
 ```
 
-**macOS**: Homebrew already created a superuser role for you. Run the commands above only if you get an auth error.
+**macOS**: Homebrew already created a role for you. Run the commands above only if you get an auth error.
 
 **Windows**: The installer created a `postgres` role. Edit `DATABASE_URL` in your `.env` to use it:
 
@@ -155,7 +155,7 @@ brew services start postgresql@17
 **"role does not exist"** — Create a Postgres role for your OS user:
 
 ```sh
-sudo -u postgres createuser --superuser "$USER"
+sudo -u postgres createuser --createdb "$USER"
 sudo -u postgres psql -c "ALTER USER \"$USER\" WITH PASSWORD 'postgres';"
 ```
 
