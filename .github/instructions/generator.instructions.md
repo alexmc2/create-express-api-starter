@@ -44,7 +44,7 @@ Verify these handle edge cases: empty strings, leading/trailing special characte
 
 ## Template data values and database modes
 
-- `databaseUrl` and `osUsername` are computed for all modes but only rendered into files that are included for postgres modes (`.env.example` is excluded for `memory`). A harmless unused value in `templateData()` is not a bug — do not flag it.
+- `databaseUrl` and `osUsername` are computed for all modes but only rendered into files that are included for postgres modes. A harmless unused value in `templateData()` is not a bug — do not flag it.
 - `getOsUsername()` is only called when `isPostgres` is true, and has a try-catch fallback for environments without a passwd entry.
 
 ## Path handling
