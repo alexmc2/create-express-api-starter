@@ -2,11 +2,27 @@ import type { ErrorRequestHandler } from 'express';
 
 interface HttpError extends Error {
   status?: number;
+  code?: string;
+  detail?: string;
 }
 
 <% if (educational) { %>// Express recognises this as an error handler because it has four parameters.
 // Any error passed to next(error) anywhere in the app ends up here.
 <% } %>const errorHandler: ErrorRequestHandler = (error: HttpError, _req, res, _next) => {
+<% if (educational) { %>  // Postgres uses error code 23505 for UNIQUE constraint violations.
+  // Returning 409 helps API users understand this is a data conflict.
+<% } %>  if (error?.code === '23505') {
+    const detail = typeof error?.detail === 'string' ? error.detail : '';
+    const message = detail.includes('email')
+      ? 'A user with this email already exists.'
+      : 'A record with this value already exists.';
+
+    return res.status(409).json({
+      status: 409,
+      message
+    });
+  }
+
   const status = Number.isInteger(error?.status) ? (error.status as number) : 500;
   const message = typeof error?.message === 'string' ? error.message : 'Internal server error.';
 

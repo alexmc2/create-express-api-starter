@@ -54,6 +54,7 @@ Then:
 
 ```bash
 cd my-api
+cp .env.example .env
 npm run dev    # Starts the dev server with watch mode
 npm test       # Runs the test suite
 ```
@@ -131,6 +132,8 @@ Errors return a consistent JSON shape:
 
 In development mode, a `stack` trace is included for debugging. In production, it's omitted.
 
+In PostgreSQL mode, duplicate values for unique fields (like `email`) return `409 Conflict` with a clear message instead of a generic `500`.
+
 ### Scripts
 
 **JavaScript projects:**
@@ -168,12 +171,13 @@ For developers who already have PostgreSQL installed locally. The generated proj
 
 - `pg` as a dependency with a connection pool module
 - `db/schema.sql` and `db/seed.sql` for table creation and sample data
-- npm scripts (`db:setup`, `db:seed`, `db:reset`) that run SQL files via `psql`
+- npm scripts (`db:create`, `db:setup`, `db:seed`, `db:reset`) that run SQL files via `psql`
 
 **Prerequisites:** PostgreSQL installed with `psql` available on your PATH.
 
 ```bash
 # After generation
+npm run db:create   # Create database (safe to re-run)
 npm run db:setup    # Create tables
 npm run db:seed     # Insert sample data
 npm run dev         # Start the server

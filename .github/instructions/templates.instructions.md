@@ -41,12 +41,12 @@ File inclusion is controlled by `shouldIncludeTemplate()` in the generator, not 
 A generated project uses exactly one database mode. Content from different modes never appears in the same output. Do not flag "inconsistencies" between files that belong to different modes:
 
 - **PostgreSQL versions may differ** between `compose.yaml` (Docker image tag) and README install instructions (Homebrew/apt package version). These target different modes (`postgres-docker` vs `postgres-psql`) and are never seen together. The Docker image version and the local install version are independent choices.
-- **`databaseUrl` in `templateData()`** is computed for all modes but only rendered into `.env.example`, which is excluded for `memory` mode by `shouldIncludeTemplate()`. A harmless unused value is not a bug.
+- **`databaseUrl` in `templateData()`** is computed for all modes. It is only rendered where templates reference it (Postgres-only EJS branches). A harmless unused value is not a bug.
 
 ## Security
 
-- `.env.example` files must use placeholder values, never real credentials.
-- Database URLs use convention-based defaults (`postgres://postgres:postgres@localhost:5433/...` for Docker, `postgres://<osUsername>:postgres@localhost:5432/...` for psql).
+- `.env.example` files must not include personal or production secrets.
+- Local development defaults are allowed when clearly documented (for example: `postgres://postgres:postgres@localhost:5433/...` for Docker, `postgres://<osUsername>:postgres@localhost:5432/...` for psql).
 - Do not hardcode secrets or API keys in any template.
 
 ## Readability

@@ -141,6 +141,14 @@ describe('generator', () => {
         `postgres://${encodedUsername}:postgres@localhost:5432/my_api_psql_dev`,
       );
 
+      const errorHandler = await fs.readFile(
+        path.join(targetDir, 'src/middleware/errorHandler.js'),
+        'utf8',
+      );
+      expect(errorHandler).toContain(`error?.code === '23505'`);
+      expect(errorHandler).toContain('status: 409');
+      expect(errorHandler).toContain('A user with this email already exists.');
+
       expect(
         await fs.pathExists(path.join(targetDir, 'scripts/dbCreate.js')),
       ).toBe(true);

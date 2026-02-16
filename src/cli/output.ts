@@ -37,6 +37,8 @@ export function printNextSteps(selection: UserSelections): void {
     console.log('  npm install');
   }
 
+  console.log('  cp .env.example .env');
+
   if (selection.databaseMode === 'postgres-psql') {
     console.log('');
     console.log(
@@ -52,14 +54,12 @@ export function printNextSteps(selection: UserSelections): void {
     );
     console.log('');
     console.log(pc.bold('  Then run:'));
-    console.log('  cp .env.example .env');
     console.log('  npm run db:create');
     console.log('  npm run db:setup');
     console.log('  npm run db:seed');
   }
 
   if (selection.databaseMode === 'postgres-docker') {
-    console.log('  cp .env.example .env');
     console.log('  npm run db:up');
     console.log('  npm run db:setup');
     console.log('  npm run db:seed');
