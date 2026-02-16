@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { Pool } = require('pg');
-
+<% if (isDocker) { %>
 const RETRIES = 20;
 const RETRY_DELAY_MS = 1000;
 
@@ -22,19 +24,22 @@ async function waitForDatabase(pool) {
 
   throw new Error('Unable to connect to database after 20 retries.');
 }
-
+<% } %>
 async function run() {
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
-    throw new Error('DATABASE_URL is required.');
+    console.error('Error: DATABASE_URL is not set.');
+    console.error('Make sure you have a .env file with DATABASE_URL defined.');
+    console.error('You can copy .env.example to .env to get started.');
+    process.exit(1);
   }
 
   const pool = new Pool({ connectionString: databaseUrl });
 
   try {
-    await waitForDatabase(pool);
-    const seedPath = path.join(process.cwd(), 'db', 'seed.sql');
+<% if (isDocker) { %>    await waitForDatabase(pool);
+<% } %>    const seedPath = path.join(process.cwd(), 'db', 'seed.sql');
     const seedSql = await fs.readFile(seedPath, 'utf8');
     await pool.query(seedSql);
     console.log('Database seed applied.');

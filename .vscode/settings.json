@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.yaml.ejs": "yaml",
+    "*.sql.ejs": "sql"
+  }
+}

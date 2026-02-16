@@ -1,0 +1,11 @@
+<% if (educational) { %>// Custom error class for API errors. Extending the built-in Error class
+// gives us proper stack traces and lets the error handler distinguish
+// between expected API errors and unexpected crashes.
+<% } %>export default class AppError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
+}

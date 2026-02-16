@@ -1,5 +1,4 @@
 # @alexmc2/create-express-api-starter
-
 **🚧 Work in progress** - this package is under active development and not yet been published to npm.
 
 A modern scaffolding CLI that generates production-ready Express API projects with sensible defaults. Designed to get beginners up and running quickly while teaching best practices through well-structured code and educational comments.
@@ -14,9 +13,7 @@ npx @alexmc2/create-express-api-starter my-api
 
 Express is intentionally unopinionated. That's a strength for experienced developers, but it means every new backend project starts with the same ritual: setting up folder structure, wiring middleware, writing error handlers, configuring a test runner, and figuring out how everything connects. Beginners lose hours to this before writing a single route.
 
-Frontend has solved this with `create-*` tools. Backend hasn't — not well, anyway. The Express ecosystem has plenty of starter repos and outdated generators, but very few modern, interactive scaffolders that get a beginner from zero to a working, tested API in minutes.
-
-This tool fills that gap.
+The Express ecosystem has plenty of starter repos and outdated generators, but very few modern, interactive scaffolders that get a beginner from zero to a working, tested API in minutes.
 
 ## What it does
 
@@ -35,15 +32,15 @@ The generated project is designed to be a **runway**: enough structure to get mo
 
 This is a two-layer system:
 
-1. **The CLI tool** (this package) — published to npm, contains the prompts, templates, and generation logic.
-2. **The generated project** — a standalone Express API created inside a new folder with its own `package.json`, dependencies, scripts, and tests.
+1. **The CLI tool** (this package) - published to npm, contains the prompts, templates, and generation logic.
+2. **The generated project** - a standalone Express API created inside a new folder with its own `package.json`, dependencies, scripts, and tests.
 
-When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the CLI temporarily and runs it. The CLI writes files into `my-api/` and optionally runs `npm install` inside that folder. The CLI doesn't "contain" Express — it generates a project that depends on Express.
+When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the CLI temporarily and runs it. The CLI writes files into `my-api/` and optionally runs `npm install` inside that folder. The CLI doesn't "contain" Express - it generates a project that depends on Express.
 
 ## Quick start
 
 ```bash
-# Interactive mode — answer a few questions
+# Interactive mode - answer a few questions
 npx @alexmc2/create-express-api-starter my-api
 
 # Accept all defaults (JavaScript, Simple architecture, In-memory DB)
@@ -57,6 +54,7 @@ Then:
 
 ```bash
 cd my-api
+cp .env.example .env
 npm run dev    # Starts the dev server with watch mode
 npm test       # Runs the test suite
 ```
@@ -67,23 +65,23 @@ Your API is live at `http://localhost:3000`. Hit `http://localhost:3000/health` 
 
 The CLI walks you through these choices interactively, or you can skip them all with `--yes` to accept defaults.
 
-| Option                   | Choices                                       | Default    |
-| ------------------------ | --------------------------------------------- | ---------- |
-| **Language**             | JavaScript, TypeScript                        | JavaScript |
-| **Architecture**         | Simple (flat), MVC (layered)                  | Simple     |
-| **Database**             | In-memory, Postgres (psql), Postgres (Docker) | In-memory  |
-| **Educational comments** | On, Off                                       | On         |
-| **Install dependencies** | Yes, No                                       | Yes        |
-| **Initialise git repo**  | Yes, No                                       | Yes        |
+| Option | Choices | Default |
+|---|---|---|
+| **Language** | JavaScript, TypeScript | JavaScript |
+| **Architecture** | Simple (flat), MVC (layered) | Simple |
+| **Database** | In-memory, Postgres (psql), Postgres (Docker) | In-memory |
+| **Educational comments** | On, Off | On |
+| **Install dependencies** | Yes, No | Yes |
+| **Initialise git repo** | Yes, No | Yes |
 
 ### Flags
 
-| Flag           | Effect                                          |
-| -------------- | ----------------------------------------------- |
-| `--yes`        | Accept all defaults, skip prompts               |
-| `--dry-run`    | Print the generation plan without writing files |
-| `--no-install` | Skip `npm install` after generation             |
-| `--no-git`     | Skip `git init` after generation                |
+| Flag | Effect |
+|---|---|
+| `--yes` | Accept all defaults, skip prompts |
+| `--dry-run` | Print the generation plan without writing files |
+| `--no-install` | Skip `npm install` after generation |
+| `--no-git` | Skip `git init` after generation |
 
 ## What gets generated
 
@@ -115,11 +113,11 @@ MVC architecture adds `controllers/`, `services/`, and `repositories/` directori
 
 Every generated project includes these middleware out of the box:
 
-- **express.json()** — parses JSON request bodies
-- **cors** — enables cross-origin requests
-- **helmet** — sets security-related HTTP headers
-- **morgan** — logs HTTP requests in dev format
-- **dotenv** — loads environment variables from `.env`
+- **express.json()** - parses JSON request bodies
+- **cors** - enables cross-origin requests
+- **helmet** - sets security-related HTTP headers
+- **morgan** - logs HTTP requests in dev format
+- **dotenv** - loads environment variables from `.env`
 
 ### Error handling
 
@@ -134,24 +132,26 @@ Errors return a consistent JSON shape:
 
 In development mode, a `stack` trace is included for debugging. In production, it's omitted.
 
+In PostgreSQL mode, duplicate values for unique fields (like `email`) return `409 Conflict` with a clear message instead of a generic `500`.
+
 ### Scripts
 
 **JavaScript projects:**
 
-| Script        | Command                      | Purpose                      |
-| ------------- | ---------------------------- | ---------------------------- |
+| Script | Command | Purpose |
+|---|---|---|
 | `npm run dev` | `node --watch src/server.js` | Dev server with auto-restart |
-| `npm start`   | `node src/server.js`         | Production start             |
-| `npm test`    | `jest`                       | Run test suite               |
+| `npm start` | `node src/server.js` | Production start |
+| `npm test` | `jest` | Run test suite |
 
 **TypeScript projects:**
 
-| Script          | Command                   | Purpose                      |
-| --------------- | ------------------------- | ---------------------------- |
-| `npm run dev`   | `tsx watch src/server.ts` | Dev server with auto-restart |
-| `npm run build` | `tsc`                     | Compile to JavaScript        |
-| `npm start`     | `node dist/server.js`     | Production start (compiled)  |
-| `npm test`      | `jest`                    | Run test suite               |
+| Script | Command | Purpose |
+|---|---|---|
+| `npm run dev` | `tsx watch src/server.ts` | Dev server with auto-restart |
+| `npm run build` | `tsc` | Compile to JavaScript |
+| `npm start` | `node dist/server.js` | Production start (compiled) |
+| `npm test` | `jest` | Run test suite |
 
 ### Tests
 
@@ -161,7 +161,7 @@ Every generated project includes a working test suite using **Jest** and **Super
 
 ### In-memory (default)
 
-Data is stored in a plain JavaScript array. No database required — the project runs instantly. Data resets when the server restarts.
+Data is stored in a plain JavaScript array. No database required - the project runs instantly. Data resets when the server restarts.
 
 This is ideal for learning, prototyping, and understanding the project structure before adding a real database. The code is structured with a repository layer, so swapping in a real database later is straightforward.
 
@@ -171,12 +171,13 @@ For developers who already have PostgreSQL installed locally. The generated proj
 
 - `pg` as a dependency with a connection pool module
 - `db/schema.sql` and `db/seed.sql` for table creation and sample data
-- npm scripts (`db:setup`, `db:seed`, `db:reset`) that run SQL files via `psql`
+- npm scripts (`db:create`, `db:setup`, `db:seed`, `db:reset`) implemented as Node scripts using `pg` to create the database, apply schema, and seed data
 
-**Prerequisites:** PostgreSQL installed with `psql` available on your PATH.
+**Prerequisites:** PostgreSQL installed and running locally. This mode also expects `psql` client tools on your PATH during scaffolding.
 
 ```bash
 # After generation
+npm run db:create   # Create database (safe to re-run)
 npm run db:setup    # Create tables
 npm run db:seed     # Insert sample data
 npm run dev         # Start the server
@@ -187,7 +188,7 @@ npm run dev         # Start the server
 For developers who have Docker but don't want to install PostgreSQL directly. The generated project includes:
 
 - A `compose.yaml` that runs PostgreSQL in a container (port 5433 to avoid conflicts)
-- Node-based setup scripts that apply schema and seed data via the `pg` library — **no `psql` required on your machine**
+- Node-based setup scripts that apply schema and seed data via the `pg` library - **no `psql` required on your machine**
 - A built-in retry helper that waits for the database to be ready before running setup
 
 ```bash
@@ -203,13 +204,13 @@ npm run db:down     # Stop and remove container + data
 
 ## Educational comments
 
-When enabled (the default), the generated code includes short inline comments explaining _why_ things are done a certain way:
+When enabled (the default), the generated code includes short inline comments explaining *why* things are done a certain way:
 
 ```javascript
 // Parse incoming JSON request bodies so req.body is available
 app.use(express.json());
 
-// Set security headers — protects against common web vulnerabilities
+// Set security headers - protects against common web vulnerabilities
 app.use(helmet());
 ```
 
@@ -222,7 +223,7 @@ These are designed to be helpful without being overwhelming. Turn them off if th
 Generated projects use `require()` / `module.exports` (JavaScript) or compile TypeScript to CommonJS output. This is a deliberate choice for v0.1:
 
 - Most Express tutorials and Stack Overflow answers use CommonJS patterns
-- Jest's ESM support is still experimental — CommonJS avoids that complexity entirely
+- Jest's ESM support is still experimental - CommonJS avoids that complexity entirely
 - Beginners don't need to debug ESM resolution issues on day one
 
 ### Opinionated but transparent
@@ -231,7 +232,7 @@ The tool makes choices for you (Jest, not Vitest; morgan, not pino; cors + helme
 
 ### Runway, not airport
 
-The scaffold gives you enough to start building immediately, but doesn't try to be a framework. No auth, no ORM, no migrations, no rate limiting, no Swagger — those are decisions you should make when you need them, not before.
+The scaffold gives you enough to start building immediately, but doesn't try to be a framework. No auth, no ORM, no migrations, no rate limiting, no Swagger - those are decisions you should make when you need them, not before.
 
 ## Technical details
 

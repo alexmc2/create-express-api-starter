@@ -1,12 +1,11 @@
 import type { RequestHandler } from 'express';
 
+import AppError from '../errors/AppError';
+
 <% if (educational) { %>// This middleware runs after all routes. If no route matched the request,
 // it creates a 404 error and passes it to the error handler via next().
 <% } %>const notFound: RequestHandler = (_req, _res, next) => {
-  next({
-    status: 404,
-    message: 'Route not found.'
-  });
+  next(new AppError(404, 'Route not found.'));
 };
 
 export default notFound;
