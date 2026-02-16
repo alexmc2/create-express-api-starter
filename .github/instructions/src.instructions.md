@@ -37,3 +37,7 @@ Flag any circular dependency between these directories.
 - Keep functions under ~40 lines. If longer, suggest extraction.
 - Prefer `const` everywhere. `let` only when reassignment is necessary. Never `var`.
 - Use `node:` protocol for Node built-ins.
+
+## CLI output platform labels
+
+- Post-generation setup commands in `src/cli/output.ts` that use `sudo -u postgres` are labelled "Linux" only. These commands do not work on macOS Homebrew installs (no `postgres` OS user). Do not suggest changing this label to include macOS — the generated README has full OS-specific guidance.

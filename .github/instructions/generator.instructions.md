@@ -42,6 +42,11 @@ When reviewing changes to file inclusion logic, verify all three database modes 
 
 Verify these handle edge cases: empty strings, leading/trailing special characters, all-special-character names.
 
+## Template data values and database modes
+
+- `databaseUrl` and `osUsername` are computed for all modes but only rendered into files that are included for postgres modes (`.env.example` is excluded for `memory`). A harmless unused value in `templateData()` is not a bug — do not flag it.
+- `getOsUsername()` is only called when `isPostgres` is true, and has a try-catch fallback for environments without a passwd entry.
+
 ## Path handling
 
 - Template paths are normalized to POSIX (`/`) internally via `toPosixPath()`.

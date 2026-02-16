@@ -135,3 +135,5 @@ When reviewing pull requests, pay special attention to:
 6. **Import extensions** — all relative imports in `src/` must use `.js` extensions (ESM requirement).
 7. **Security** — templates should not embed secrets, and generated `.env.example` files should use placeholder values.
 8. **Backwards compatibility** — the CLI flag interface (`--yes`, `--dry-run`, `--no-install`, `--no-git`) is the public API. Do not change existing flag behavior without a migration path.
+9. **Database modes are mutually exclusive** — `memory`, `postgres-psql`, and `postgres-docker` produce completely separate output. Do not flag "inconsistencies" between content that belongs to different modes (e.g., Docker image version vs local install package version). A user only ever sees one mode's output.
+10. **Platform-specific CLI commands** — Post-generation setup commands using `sudo -u postgres` are Linux-specific. The label in `output.ts` intentionally says "Linux", not "Linux/macOS", because these commands don't work on macOS Homebrew. The generated README has OS-specific instructions.

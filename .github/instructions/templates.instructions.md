@@ -36,6 +36,13 @@ File inclusion is controlled by `shouldIncludeTemplate()` in the generator, not 
 - `isPsql` — true only for `postgres-psql`.
 - `isDocker` — true only for `postgres-docker`.
 
+### Database modes are mutually exclusive
+
+A generated project uses exactly one database mode. Content from different modes never appears in the same output. Do not flag "inconsistencies" between files that belong to different modes:
+
+- **PostgreSQL versions may differ** between `compose.yaml` (Docker image tag) and README install instructions (Homebrew/apt package version). These target different modes (`postgres-docker` vs `postgres-psql`) and are never seen together. The Docker image version and the local install version are independent choices.
+- **`databaseUrl` in `templateData()`** is computed for all modes but only rendered into `.env.example`, which is excluded for `memory` mode by `shouldIncludeTemplate()`. A harmless unused value is not a bug.
+
 ## Security
 
 - `.env.example` files must use placeholder values, never real credentials.
