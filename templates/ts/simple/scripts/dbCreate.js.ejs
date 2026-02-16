@@ -52,14 +52,29 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error('Failed to create database:', error.message);
+  const message =
+    error && typeof error === 'object' && typeof error.message === 'string'
+      ? error.message
+      : typeof error === 'string'
+        ? error
+        : String(error);
+  const code =
+    error && typeof error === 'object' && typeof error.code === 'string'
+      ? error.code
+      : '';
+
+  console.error('Failed to create database:', message);
   console.error('');
 
-  if (error.message.includes('password') || error.message.includes('SCRAM')) {
+  const authError = message.includes('password') || message.includes('SCRAM');
+  const connectionRefused =
+    message.includes('ECONNREFUSED') || code === 'ECONNREFUSED';
+
+  if (authError) {
     console.error('Your DATABASE_URL is missing credentials or the password is wrong.');
     console.error('Update DATABASE_URL in your .env file:');
     console.error('  DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/<%= databaseName %>');
-  } else if (error.message.includes('ECONNREFUSED')) {
+  } else if (connectionRefused) {
     console.error('PostgreSQL is not running. Start it first:');
     console.error('  Linux:  sudo systemctl start postgresql');
     console.error('  macOS:  brew services start postgresql');

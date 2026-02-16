@@ -157,6 +157,14 @@ describe('generator', () => {
       expect(errorHandler).toContain('status: 409');
       expect(errorHandler).toContain('A user with this email already exists.');
 
+      const dbCreate = await fs.readFile(
+        path.join(targetDir, 'scripts/dbCreate.js'),
+        'utf8',
+      );
+      expect(dbCreate).toContain('const message =');
+      expect(dbCreate).toContain('const code =');
+      expect(dbCreate).toContain('const connectionRefused =');
+
       expect(
         await fs.pathExists(path.join(targetDir, 'scripts/dbCreate.js')),
       ).toBe(true);
