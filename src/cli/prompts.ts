@@ -6,6 +6,7 @@ import {
   select,
   text
 } from '@clack/prompts';
+import pc from 'picocolors';
 
 import { DEFAULT_PROJECT_NAME, DEFAULT_SELECTIONS } from '../core/defaults.js';
 import type { ParsedArgs, UserSelections } from '../core/types.js';
@@ -38,13 +39,18 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
     };
   }
 
-  intro('Create Express API Starter');
+  intro(
+    [
+      pc.bold(pc.cyan('Create Express API Starter')),
+      pc.dim('Scaffold an Express backend with practical defaults.')
+    ].join('\n')
+  );
 
   const projectName = parsedArgs.projectName
     ? parsedArgs.projectName
     : unwrapPrompt(
         await text({
-          message: 'Project name:',
+          message: 'Project name',
           placeholder: DEFAULT_PROJECT_NAME,
           defaultValue: DEFAULT_PROJECT_NAME,
           validate(value) {
@@ -59,7 +65,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
 
   const language = unwrapPrompt(
     await select({
-      message: 'Output language:',
+      message: 'Language',
       initialValue: DEFAULT_SELECTIONS.language,
       options: [
         {
@@ -76,7 +82,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
 
   const architecture = unwrapPrompt(
     await select({
-      message: 'Architecture:',
+      message: 'Architecture',
       initialValue: DEFAULT_SELECTIONS.architecture,
       options: [
         {
@@ -93,7 +99,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
 
   const databaseMode = unwrapPrompt(
     await select({
-      message: 'Database:',
+      message: 'Database',
       initialValue: DEFAULT_SELECTIONS.databaseMode,
       options: [
         {
@@ -114,7 +120,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
 
   const educational = unwrapPrompt(
     await confirm({
-      message: 'Educational comments?',
+      message: 'Add educational comments',
       initialValue: DEFAULT_SELECTIONS.educational
     })
   );
@@ -123,7 +129,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
     ? parsedArgs.flags.install
     : unwrapPrompt(
         await confirm({
-          message: 'Install dependencies now?',
+          message: 'Install dependencies now',
           initialValue: DEFAULT_SELECTIONS.installDeps
         })
       );
@@ -132,12 +138,12 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
     ? parsedArgs.flags.git
     : unwrapPrompt(
         await confirm({
-          message: 'Initialize git repository?',
+          message: 'Initialize git repository',
           initialValue: DEFAULT_SELECTIONS.initGit
         })
       );
 
-  outro('Scaffolding your project...');
+  outro(pc.cyan('Scaffolding project files...'));
 
   return {
     projectName,

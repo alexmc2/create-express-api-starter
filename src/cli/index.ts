@@ -76,11 +76,15 @@ async function runCli(argv: string[]): Promise<void> {
     targetDir
   });
 
-  logger.success(`Project created at ${targetDir}`);
+  logger.success(`Project files generated at ${targetDir}.`);
 
   if (selections.installDeps) {
-    logger.info('Installing dependencies with npm...');
-    await installDependencies(targetDir);
+    const installCommand = parsedArgs.flags.verbose
+      ? 'npm install --no-audit --no-fund'
+      : 'npm install --no-audit --no-fund --loglevel=error';
+    logger.info(`Installing dependencies (${installCommand})...`);
+    await installDependencies(targetDir, parsedArgs.flags.verbose);
+    logger.success('Dependencies installed.');
   } else {
     logger.info('Skipped dependency installation.');
   }
@@ -88,6 +92,7 @@ async function runCli(argv: string[]): Promise<void> {
   if (selections.initGit) {
     logger.info('Initializing git repository...');
     await initGitRepo(targetDir);
+    logger.success('Git repository initialized.');
   } else {
     logger.info('Skipped git initialization.');
   }

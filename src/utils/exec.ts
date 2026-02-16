@@ -18,8 +18,14 @@ export async function runCommand(command: string, args: string[], cwd: string): 
   });
 }
 
-export async function installDependencies(cwd: string): Promise<void> {
-  await runCommand('npm', ['install', '--no-audit', '--no-fund'], cwd);
+export async function installDependencies(cwd: string, verbose = false): Promise<void> {
+  const args = ['install', '--no-audit', '--no-fund'];
+
+  if (!verbose) {
+    args.push('--loglevel=error');
+  }
+
+  await runCommand('npm', args, cwd);
 }
 
 export async function initGitRepo(cwd: string): Promise<void> {

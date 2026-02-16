@@ -9,6 +9,7 @@ export interface CliFlags {
   dryRun: boolean;
   install: boolean;
   git: boolean;
+  verbose: boolean;
 }
 
 export interface FlagPresence {
@@ -16,6 +17,7 @@ export interface FlagPresence {
   dryRun: boolean;
   install: boolean;
   git: boolean;
+  verbose: boolean;
 }
 
 export interface ParsedArgs {

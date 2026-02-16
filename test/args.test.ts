@@ -50,4 +50,11 @@ describe('parseArgs', () => {
     expect(parsed.flags.install).toBe(false);
     expect(parsed.flags.git).toBe(true);
   });
+
+  it('supports --verbose for full install logs', () => {
+    const parsed = parseArgs(['my-api', '--verbose']);
+
+    expect(parsed.flags.verbose).toBe(true);
+    expect(parsed.unknownFlags).toEqual([]);
+  });
 });

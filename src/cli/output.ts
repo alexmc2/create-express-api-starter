@@ -7,71 +7,137 @@ import {
   languageLabel,
 } from '../core/labels.js';
 import type { GenerationPlan, UserSelections } from '../core/types.js';
+import {
+  formatCommandLines,
+  formatKeyValueLines,
+  printCard,
+} from '../utils/terminalUi.js';
+
+function buildNextStepCommands(selection: UserSelections): string[] {
+  const commands = [`cd ${selection.projectName}`];
+
+  if (!selection.installDeps) {
+    commands.push('npm install');
+  }
+
+  commands.push('cp .env.example .env');
+
+  if (selection.databaseMode === 'postgres-psql') {
+    commands.push('npm run db:create');
+    commands.push('npm run db:setup');
+    commands.push('npm run db:seed');
+  }
+
+  if (selection.databaseMode === 'postgres-docker') {
+    commands.push('npm run db:up');
+    commands.push('npm run db:setup');
+    commands.push('npm run db:seed');
+  }
+
+  commands.push('npm run dev');
+
+  if (selection.language === 'ts') {
+    commands.push('npm run build');
+  }
+
+  commands.push('npm test');
+
+  return commands;
+}
 
 export function printDryRunPlan(
   selection: UserSelections,
   plan: GenerationPlan,
 ): void {
-  console.log(pc.bold('\nDry run plan'));
-  console.log(`Target: ${plan.targetDir}`);
-  console.log(`Language: ${languageLabel(selection.language)}`);
-  console.log(`Architecture: ${architectureLabel(selection.architecture)}`);
-  console.log(`Database: ${databaseLabel(selection.databaseMode)}`);
-  console.log(`Educational comments: ${selection.educational ? 'On' : 'Off'}`);
-  console.log(`Install dependencies: ${selection.installDeps ? 'Yes' : 'No'}`);
-  console.log(`Initialize git: ${selection.initGit ? 'Yes' : 'No'}`);
-  console.log('\nFiles to generate:');
+  const summaryLines = formatKeyValueLines([
+    {
+      key: 'Target',
+      value: formatTargetPath(plan.targetDir),
+      tone: 'accent',
+    },
+    {
+      key: 'Language',
+      value: languageLabel(selection.language),
+      tone: 'accent',
+    },
+    {
+      key: 'Architecture',
+      value: architectureLabel(selection.architecture),
+      tone: 'accent',
+    },
+    {
+      key: 'Database',
+      value: databaseLabel(selection.databaseMode),
+      tone: 'accent',
+    },
+    {
+      key: 'Educational',
+      value: selection.educational ? 'On' : 'Off',
+      tone: selection.educational ? 'success' : 'muted',
+    },
+    {
+      key: 'Install deps',
+      value: selection.installDeps ? 'Yes' : 'No',
+      tone: selection.installDeps ? 'success' : 'warn',
+    },
+    {
+      key: 'Init git',
+      value: selection.initGit ? 'Yes' : 'No',
+      tone: selection.initGit ? 'success' : 'warn',
+    },
+  ]);
 
-  for (const file of plan.files) {
-    console.log(`  - ${file.outputRelativePath}`);
-  }
+  const fileLines = plan.files.map((file) => `${pc.dim('-')} ${file.outputRelativePath}`);
 
-  console.log(`\nTotal files: ${plan.files.length}`);
+  console.log('');
+  printCard('Dry Run: Configuration', summaryLines);
+  console.log('');
+  printCard(`Dry Run: Files (${plan.files.length})`, fileLines);
 }
 
 export function printNextSteps(selection: UserSelections): void {
-  console.log(pc.bold('\nNext steps'));
-  console.log(`  cd ${selection.projectName}`);
+  const summaryLines = formatKeyValueLines([
+    {
+      key: 'Project',
+      value: selection.projectName,
+      tone: 'accent',
+    },
+    {
+      key: 'Stack',
+      value: [
+        languageLabel(selection.language),
+        architectureLabel(selection.architecture),
+        databaseLabel(selection.databaseMode),
+      ].join(' | '),
+      tone: 'accent',
+    },
+    {
+      key: 'Educational',
+      value: selection.educational ? 'On' : 'Off',
+      tone: selection.educational ? 'success' : 'muted',
+    },
+  ]);
 
-  if (!selection.installDeps) {
-    console.log('  npm install');
-  }
+  const nextStepCommands = buildNextStepCommands(selection);
 
-  console.log('  cp .env.example .env');
+  console.log('');
+  printCard('Project Ready', summaryLines);
+  console.log('');
+  printCard('Next Steps', formatCommandLines(nextStepCommands));
 
   if (selection.databaseMode === 'postgres-psql') {
+    const setupLines = [
+      pc.yellow('Linux first-time setup (run once if needed):'),
+      pc.dim('# Create a Postgres role matching your OS user'),
+      ...formatCommandLines([
+        'sudo -u postgres createuser --createdb "$USER"',
+        `sudo -u postgres psql -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
+      ]),
+    ];
+
     console.log('');
-    console.log(
-      pc.yellow(
-        '  ⚠  First-time Postgres setup (Linux — run once, then skip):',
-      ),
-    );
-    console.log('');
-    console.log(pc.dim('  # Create a Postgres role matching your OS user'));
-    console.log('  sudo -u postgres createuser --createdb "$USER"');
-    console.log(
-      `  sudo -u postgres psql -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
-    );
-    console.log('');
-    console.log(pc.bold('  Then run:'));
-    console.log('  npm run db:create');
-    console.log('  npm run db:setup');
-    console.log('  npm run db:seed');
+    printCard('Postgres Setup', setupLines);
   }
-
-  if (selection.databaseMode === 'postgres-docker') {
-    console.log('  npm run db:up');
-    console.log('  npm run db:setup');
-    console.log('  npm run db:seed');
-  }
-
-  console.log('  npm run dev');
-
-  if (selection.language === 'ts') {
-    console.log('  npm run build');
-  }
-
-  console.log('  npm test');
 }
 
 export function formatTargetPath(targetDir: string): string {
