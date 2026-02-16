@@ -40,7 +40,9 @@ export function printNextSteps(selection: UserSelections): void {
   if (selection.databaseMode === 'postgres-psql') {
     console.log('');
     console.log(
-      pc.yellow('  ⚠  First-time Postgres setup (run once, then skip):'),
+      pc.yellow(
+        '  ⚠  First-time Postgres setup (Linux/macOS — run once, then skip):',
+      ),
     );
     console.log('');
     console.log(pc.dim('  # Create a Postgres role matching your OS user'));

@@ -145,7 +145,7 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     databaseUrl:
       config.databaseMode === 'postgres-docker'
         ? `postgres://postgres:postgres@localhost:5433/${dbName}`
-        : `postgres://${os.userInfo().username}:postgres@localhost:5432/${dbName}`,
+        : `postgres://${encodeURIComponent(os.userInfo().username)}:postgres@localhost:5432/${dbName}`,
     osUsername: os.userInfo().username,
   };
 }
