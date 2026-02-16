@@ -11,6 +11,14 @@ async function createTempRoot(prefix: string): Promise<string> {
   return fs.mkdtemp(path.join(os.tmpdir(), prefix));
 }
 
+function getExpectedUsername(): string {
+  try {
+    return os.userInfo().username;
+  } catch {
+    return process.env.USER ?? process.env.USERNAME ?? 'postgres';
+  }
+}
+
 const jsSimpleMemory: TemplateConfig = {
   projectName: 'my-api',
   language: 'js',
@@ -121,7 +129,7 @@ describe('generator', () => {
         targetDir,
       });
 
-      const expectedUsername = os.userInfo().username;
+      const expectedUsername = getExpectedUsername();
 
       const readme = await fs.readFile(
         path.join(targetDir, 'README.md'),

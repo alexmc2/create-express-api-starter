@@ -171,9 +171,9 @@ For developers who already have PostgreSQL installed locally. The generated proj
 
 - `pg` as a dependency with a connection pool module
 - `db/schema.sql` and `db/seed.sql` for table creation and sample data
-- npm scripts (`db:create`, `db:setup`, `db:seed`, `db:reset`) that run SQL files via `psql`
+- npm scripts (`db:create`, `db:setup`, `db:seed`, `db:reset`) implemented as Node scripts using `pg` to create the database, apply schema, and seed data
 
-**Prerequisites:** PostgreSQL installed with `psql` available on your PATH.
+**Prerequisites:** PostgreSQL installed and running locally. This mode also expects `psql` client tools on your PATH during scaffolding.
 
 ```bash
 # After generation
