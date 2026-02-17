@@ -43,14 +43,16 @@ export function parseArgs(argv: string[]): ParsedArgs {
     yes: false,
     dryRun: false,
     install: true,
-    git: true
+    git: true,
+    verbose: false
   };
 
   const provided = {
     yes: false,
     dryRun: false,
     install: false,
-    git: false
+    git: false,
+    verbose: false
   };
 
   const unknownFlags: string[] = [];
@@ -126,6 +128,18 @@ export function parseArgs(argv: string[]): ParsedArgs {
       const noGit = parsedValue ?? true;
       flags.git = !noGit;
       provided.git = true;
+      continue;
+    }
+
+    if (name === 'verbose') {
+      const parsedValue = parseBooleanValue(value);
+      if (value !== undefined && parsedValue === undefined) {
+        unknownFlags.push(token);
+        continue;
+      }
+
+      flags.verbose = parsedValue ?? true;
+      provided.verbose = true;
       continue;
     }
 

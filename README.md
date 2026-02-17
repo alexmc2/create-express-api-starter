@@ -82,6 +82,7 @@ The CLI walks you through these choices interactively, or you can skip them all 
 | `--dry-run` | Print the generation plan without writing files |
 | `--no-install` | Skip `npm install` after generation |
 | `--no-git` | Skip `git init` after generation |
+| `--verbose` | Show full `npm install` logs instead of the quiet default |
 
 ## What gets generated
 
