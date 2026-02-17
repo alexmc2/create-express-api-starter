@@ -1,5 +1,7 @@
-<% if (educational) { %>// Supertest lets you make HTTP requests against your Express app
-// without starting a real server — fast, isolated, no port conflicts.
+<% if (educational) { %>// File overview: Basic endpoint tests that verify the API responds with expected status codes and payloads.
+<% } %>
+<% if (educational) { %>// Supertest sends HTTP requests directly to the Express app instance.
+// This keeps tests fast and isolated because no network port is opened.
 <% } %>import request from 'supertest';
 
 import app from '../src/app';

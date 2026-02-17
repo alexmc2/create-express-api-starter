@@ -1,6 +1,9 @@
-<% if (educational) { %>// Custom error class for API errors. Extending the built-in Error class
-// gives us proper stack traces and lets the error handler distinguish
-// between expected API errors and unexpected crashes.
+<% if (educational) { %>// File overview: Defines an AppError class for expected API errors that include HTTP status codes.
+<% } %>
+<% if (educational) { %>// A custom error class for handling API errors. By extending JavaScript's
+// built-in Error class, we ensure that stack traces are generated correctly
+// and that the error handler can distinguish between anticipated API
+// errors and unexpected application failures.
 <% } %>export default class AppError extends Error {
   status: number;
 

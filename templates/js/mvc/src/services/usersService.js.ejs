@@ -1,8 +1,10 @@
+<% if (educational) { %>// File overview: Contains user business rules and validation before calling the repository layer.
+<% } %>
 const usersRepository = require('../repositories/usersRepository');
 const AppError = require('../errors/AppError');
 
-<% if (educational) { %>// The service layer contains business logic and validation.
-// It sits between controllers and repositories, keeping both thin.
+<% if (educational) { %>// Services contain business rules and input validation. They sit between
+// controllers (HTTP concerns) and repositories (data access concerns).
 <% } %>async function listUsers() {
   return usersRepository.getAll();
 }
@@ -10,8 +12,8 @@ const AppError = require('../errors/AppError');
 async function createUser(payload) {
   const { name, email } = payload;
 
-<% if (educational) { %>  // Validate before touching the database — throw an AppError
-  // with a status code so the error handler can send the right response.
+<% if (educational) { %>  // Validate input before calling the repository. Throwing AppError provides
+  // both the message and status code needed for a clear client response.
 <% } %>  if (!name || typeof name !== 'string') {
     throw new AppError(400, '"name" is required.');
   }

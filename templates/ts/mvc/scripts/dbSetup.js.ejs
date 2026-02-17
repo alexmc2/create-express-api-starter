@@ -1,3 +1,5 @@
+<% if (educational) { %>// File overview: Runs db/schema.sql to create or reset database tables.
+<% } %>
 require('dotenv').config();
 
 const fs = require('node:fs/promises');
@@ -7,11 +9,13 @@ const { Pool } = require('pg');
 const RETRIES = 20;
 const RETRY_DELAY_MS = 1000;
 
-function sleep(ms) {
+<% if (educational) { %>// Sleep helper used between retry attempts while the container starts.
+<% } %>function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function waitForDatabase(pool) {
+<% if (educational) { %>// Retry a simple query until PostgreSQL is ready to accept commands.
+<% } %>async function waitForDatabase(pool) {
   for (let attempt = 1; attempt <= RETRIES; attempt += 1) {
     try {
       await pool.query('SELECT 1');
@@ -25,7 +29,8 @@ async function waitForDatabase(pool) {
   throw new Error('Unable to connect to database after 20 retries.');
 }
 <% } %>
-async function run() {
+<% if (educational) { %>// Read db/schema.sql and apply it to the configured database.
+<% } %>async function run() {
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
@@ -38,7 +43,9 @@ async function run() {
   const pool = new Pool({ connectionString: databaseUrl });
 
   try {
-<% if (isDocker) { %>    await waitForDatabase(pool);
+<% if (isDocker) { %><% if (educational) { %>    // Docker containers may need a few seconds before accepting connections.
+<% } %>    await waitForDatabase(pool);
+<% } %><% if (educational) { %>    // Loading SQL from a file keeps schema changes visible in version control.
 <% } %>    const schemaPath = path.join(process.cwd(), 'db', 'schema.sql');
     const schemaSql = await fs.readFile(schemaPath, 'utf8');
     await pool.query(schemaSql);
@@ -49,6 +56,7 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error(error.message);
+<% if (educational) { %>  // Exit with a non-zero status so npm reports the script as failed.
+<% } %>  console.error(error.message);
   process.exit(1);
 });

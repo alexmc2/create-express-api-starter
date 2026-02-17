@@ -1,3 +1,5 @@
+<% if (educational) { %>// File overview: Builds and configures the Express app (middleware, routes, and error pipeline).
+<% } %>
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -10,17 +12,17 @@ import usersRouter from './routes/users';
 
 const app = express();
 
-<% if (educational) { %>// Parse JSON request bodies so route handlers can access req.body.
+<% if (educational) { %>// Parse JSON request bodies so route handlers can read data from req.body.
 <% } %>app.use(express.json());
-<% if (educational) { %>// Enable CORS for local client/server development workflows.
+<% if (educational) { %>// Enable CORS so browser clients on other origins can call this API.
 <% } %>app.use(cors());
-<% if (educational) { %>// Add secure HTTP headers by default.
+<% if (educational) { %>// Add common HTTP security headers through Helmet's default protections.
 <% } %>app.use(helmet());
-<% if (educational) { %>// Log requests in development-friendly format.
+<% if (educational) { %>// Log each request in development format to make local debugging easier.
 <% } %>app.use(morgan('dev'));
 
-<% if (educational) { %>// Root route — a helpful landing page so visiting http://localhost:3000
-// shows what endpoints are available instead of a confusing 404.
+<% if (educational) { %>// Provide a simple root endpoint so visiting the API URL in a browser
+// shows available routes instead of an immediate 404 response.
 <% } %>app.get('/', (_req, res) => {
   res.json({
     message: 'API is running',

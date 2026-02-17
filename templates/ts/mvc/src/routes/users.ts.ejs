@@ -1,11 +1,13 @@
+<% if (educational) { %>// File overview: Maps /api/users endpoints to controller methods in the MVC request flow.
+<% } %>
 import { Router } from 'express';
 
 import usersController from '../controllers/usersController';
 
 const router = Router();
 
-<% if (educational) { %>// Routes only define URL-to-controller mappings — no business logic here.
-// This keeps route files short and makes it easy to see the full API at a glance.
+<% if (educational) { %>// Route files should map URLs to controller functions and nothing more.
+// Keeping them thin makes the API surface quick to scan and reason about.
 <% } %>router.get('/', usersController.listUsers);
 router.post('/', usersController.createUser);
 

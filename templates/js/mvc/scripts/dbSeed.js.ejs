@@ -1,3 +1,5 @@
+<% if (educational) { %>// File overview: Runs db/seed.sql to insert starter rows into the database.
+<% } %>
 require('dotenv').config();
 
 const fs = require('node:fs/promises');
@@ -7,11 +9,13 @@ const { Pool } = require('pg');
 const RETRIES = 20;
 const RETRY_DELAY_MS = 1000;
 
-function sleep(ms) {
+<% if (educational) { %>// Sleep helper used between retry attempts.
+<% } %>function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function waitForDatabase(pool) {
+<% if (educational) { %>// Retry a simple query until PostgreSQL is ready.
+<% } %>async function waitForDatabase(pool) {
   for (let attempt = 1; attempt <= RETRIES; attempt += 1) {
     try {
       await pool.query('SELECT 1');
@@ -25,7 +29,8 @@ async function waitForDatabase(pool) {
   throw new Error('Unable to connect to database after 20 retries.');
 }
 <% } %>
-async function run() {
+<% if (educational) { %>// Read db/seed.sql and run it to insert starter data.
+<% } %>async function run() {
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
@@ -38,7 +43,9 @@ async function run() {
   const pool = new Pool({ connectionString: databaseUrl });
 
   try {
-<% if (isDocker) { %>    await waitForDatabase(pool);
+<% if (isDocker) { %><% if (educational) { %>    // Docker containers may need a few seconds before accepting connections.
+<% } %>    await waitForDatabase(pool);
+<% } %><% if (educational) { %>    // Loading SQL from a file keeps sample data updates easy to review.
 <% } %>    const seedPath = path.join(process.cwd(), 'db', 'seed.sql');
     const seedSql = await fs.readFile(seedPath, 'utf8');
     await pool.query(seedSql);
@@ -49,6 +56,7 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error(error.message);
+<% if (educational) { %>  // Exit with a non-zero status so npm reports the script as failed.
+<% } %>  console.error(error.message);
   process.exit(1);
 });

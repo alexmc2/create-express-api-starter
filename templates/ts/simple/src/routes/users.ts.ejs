@@ -1,3 +1,5 @@
+<% if (educational) { %>// File overview: Defines /api/users routes, including request validation and repository calls.
+<% } %>
 import { Router } from 'express';
 
 import usersRepository from '../repositories/usersRepository';
@@ -5,8 +7,8 @@ import AppError from '../errors/AppError';
 
 const router = Router();
 
-<% if (educational) { %>// Wrap async route handlers in try/catch and forward errors to next()
-// so Express's error-handling middleware can respond with a proper error.
+<% if (educational) { %>// Async route handlers should pass failures to next(error) so the
+// centralized error handler can return a consistent HTTP response.
 <% } %>router.get('/', async (_req, res, next) => {
   try {
     const users = await usersRepository.getAll();
@@ -18,9 +20,9 @@ const router = Router();
 
 router.post('/', async (req, res, next) => {
   try {
-<% if (educational) { %>    // Validate input before passing it to the repository.
-    // Passing any value to next(err) skips to the error handler.
-    // We use AppError to include a status code and message.
+<% if (educational) { %>    // Validate input at the API boundary before storing data.
+    // Calling next(error) skips the rest of the handler and moves control
+    // to the central error middleware, which formats the HTTP response.
 <% } %>    const { name, email } = req.body ?? {};
 
     if (!name || typeof name !== 'string') {

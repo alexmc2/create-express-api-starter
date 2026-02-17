@@ -1,9 +1,11 @@
+<% if (educational) { %>// File overview: Handles unmatched routes by forwarding a 404 error to the central error handler.
+<% } %>
 import type { RequestHandler } from 'express';
 
 import AppError from '../errors/AppError';
 
-<% if (educational) { %>// This middleware runs after all routes. If no route matched the request,
-// it creates a 404 error and passes it to the error handler via next().
+<% if (educational) { %>// This middleware runs only when no route matched the request.
+// It forwards a 404 error to the central error handler for a uniform response.
 <% } %>const notFound: RequestHandler = (_req, _res, next) => {
   next(new AppError(404, 'Route not found.'));
 };

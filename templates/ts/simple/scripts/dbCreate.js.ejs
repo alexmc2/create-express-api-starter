@@ -1,3 +1,5 @@
+<% if (educational) { %>// File overview: Creates the target PostgreSQL database if it does not already exist.
+<% } %>
 require('dotenv').config();
 
 const { Pool } = require('pg');
@@ -12,8 +14,9 @@ async function run() {
     process.exit(1);
   }
 
-  // Parse the database name from the connection string.
-  const url = new URL(databaseUrl);
+<% if (educational) { %>  // Extract the database name from DATABASE_URL.
+  // This is the path segment that appears after host and port.
+<% } %>  const url = new URL(databaseUrl);
   const dbName = url.pathname.slice(1);
 
   if (!dbName) {
@@ -21,16 +24,17 @@ async function run() {
     process.exit(1);
   }
 
-  // Reject database names with unsafe characters to avoid SQL injection
-  // in the CREATE DATABASE statement (identifiers can't be parameterised).
-  if (!/^[a-zA-Z0-9_-]+$/.test(dbName)) {
+<% if (educational) { %>  // Validate the database name before interpolation.
+  // SQL identifiers cannot use parameter placeholders, so we restrict
+  // allowed characters to a safe subset.
+<% } %>  if (!/^[a-zA-Z0-9_-]+$/.test(dbName)) {
     console.error(`Error: Database name "${dbName}" contains invalid characters.`);
     console.error('Use only letters, numbers, hyphens, and underscores.');
     process.exit(1);
   }
 
-  // Connect to the default "postgres" database to create the target database.
-  url.pathname = '/postgres';
+<% if (educational) { %>  // Connect to the default "postgres" database, then create the target one.
+<% } %>  url.pathname = '/postgres';
   const pool = new Pool({ connectionString: url.toString() });
 
   try {
