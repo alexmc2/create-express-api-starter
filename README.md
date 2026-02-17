@@ -14,7 +14,7 @@ npx @alexmc2/create-express-api-starter my-api
 
 ## Why this exists
 
-Express is unopinionated by design. That's powerful, but it means every new project starts with the same setup: folder structure, middleware wiring, error handlers, test runner, linting. This tool does all of that for you so you can skip straight to writing routes.
+Express is unopinionated by design. That's great, but it means every new project starts with the same setup: folder structure, middleware wiring, error handlers, test runner, linting. This tool does all of that for you so you can skip straight to writing routes.
 
 The generated project is simple enough to understand and modify. It's not a framework - it's a starting point that gets out of your way.
 
