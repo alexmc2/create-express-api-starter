@@ -14,13 +14,18 @@
   "homepage": "https://github.com/alexmc2/create-express-api-starter#readme",
   "keywords": [
     "express",
-    "api",
+    "express-generator",
     "scaffold",
-    "starter",
     "cli",
-    "generator",
+    "starter",
+    "boilerplate",
+    "api",
+    "rest",
     "typescript",
-    "javascript"
+    "javascript",
+    "postgres",
+    "jest",
+    "supertest"
   ],
   "bin": {
     "create-express-api-starter": "dist/cli.js"
