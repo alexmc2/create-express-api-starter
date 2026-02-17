@@ -11,4 +11,6 @@
   }
 }
 
-module.exports = AppError;
+<% if (isEsm) { %>export default AppError;
+<% } else { %>module.exports = AppError;
+<% } %>

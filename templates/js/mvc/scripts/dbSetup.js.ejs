@@ -1,10 +1,17 @@
 <% if (educational) { %>// File overview: Runs db/schema.sql to create or reset database tables.
 <% } %>
-require('dotenv').config();
+<% if (isEsm) { %>import 'dotenv/config';
+
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+import { Pool } from 'pg';
+<% } else { %>require('dotenv').config();
 
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { Pool } = require('pg');
+<% } %>
 <% if (isDocker) { %>
 const RETRIES = 20;
 const RETRY_DELAY_MS = 1000;

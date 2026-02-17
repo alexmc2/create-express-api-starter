@@ -4,6 +4,8 @@ export type Architecture = 'simple' | 'mvc';
 
 export type DatabaseMode = 'memory' | 'postgres-psql' | 'postgres-docker';
 
+export type ModuleSystem = 'commonjs' | 'esm';
+
 export interface CliFlags {
   yes: boolean;
   dryRun: boolean;
@@ -31,6 +33,7 @@ export interface ParsedArgs {
 export interface UserSelections {
   projectName: string;
   language: Language;
+  moduleSystem: ModuleSystem;
   architecture: Architecture;
   databaseMode: DatabaseMode;
   educational: boolean;
@@ -42,6 +45,7 @@ export interface UserSelections {
 export interface TemplateConfig {
   projectName: string;
   language: Language;
+  moduleSystem: ModuleSystem;
   architecture: Architecture;
   educational: boolean;
   databaseMode: DatabaseMode;

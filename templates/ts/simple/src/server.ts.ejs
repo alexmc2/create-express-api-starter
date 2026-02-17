@@ -4,9 +4,10 @@
 <% } %>import 'dotenv/config';
 
 import app from './app';
+import { getPort } from './utils/getPort';
 
 <% if (educational) { %>// Read the server port from PORT, defaulting to 3000 for local development.
-<% } %>const port = Number(process.env.PORT) || 3000;
+<% } %>const port = getPort(process.env.PORT, 3000);
 
 <% if (educational) { %>// Start the HTTP server and listen for incoming requests.
 <% } %>app.listen(port, () => {

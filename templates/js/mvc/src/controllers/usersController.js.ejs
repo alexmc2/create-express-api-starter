@@ -1,6 +1,8 @@
 <% if (educational) { %>// File overview: Handles /users HTTP requests and delegates business logic to the service layer.
 <% } %>
-const usersService = require('../services/usersService');
+<% if (isEsm) { %>import usersService from '../services/usersService.js';
+<% } else { %>const usersService = require('../services/usersService');
+<% } %>
 
 <% if (educational) { %>// Controllers translate HTTP requests into service calls and convert service
 // results back into HTTP responses. Business rules remain in the service layer.
@@ -23,7 +25,8 @@ async function createUser(req, res, next) {
   }
 }
 
-module.exports = {
-  listUsers,
+<% if (isEsm) { %>export default {
+<% } else { %>module.exports = {
+<% } %>  listUsers,
   createUser
 };

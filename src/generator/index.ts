@@ -7,6 +7,7 @@ import {
   architectureLabel,
   databaseLabel,
   languageLabel,
+  moduleSystemLabel,
 } from '../core/labels.js';
 import type {
   GenerationPlan,
@@ -133,6 +134,7 @@ function getOsUsername(): string {
 
 function templateData(config: TemplateConfig): Record<string, unknown> {
   const isTypeScript = config.language === 'ts';
+  const isEsm = config.moduleSystem === 'esm';
   const isPostgres = config.databaseMode !== 'memory';
   const isDocker = config.databaseMode === 'postgres-docker';
   const isPsql = config.databaseMode === 'postgres-psql';
@@ -142,6 +144,8 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
   return {
     ...config,
     isTypeScript,
+    isEsm,
+    isCommonJs: !isEsm,
     isPostgres,
     isDocker,
     isPsql,
@@ -149,6 +153,7 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     databaseName: dbName,
     educationalLabel: config.educational ? 'On' : 'Off',
     languageLabel: languageLabel(config.language),
+    moduleSystemLabel: moduleSystemLabel(config.moduleSystem),
     architectureLabel: architectureLabel(config.architecture),
     databaseLabel: databaseLabel(config.databaseMode),
     databaseUrl:

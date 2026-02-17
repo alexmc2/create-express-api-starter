@@ -1,7 +1,10 @@
 <% if (educational) { %>// File overview: Contains user business rules and validation before calling the repository layer.
 <% } %>
-const usersRepository = require('../repositories/usersRepository');
+<% if (isEsm) { %>import AppError from '../errors/AppError.js';
+import usersRepository from '../repositories/usersRepository.js';
+<% } else { %>const usersRepository = require('../repositories/usersRepository');
 const AppError = require('../errors/AppError');
+<% } %>
 
 <% if (educational) { %>// Services contain business rules and input validation. They sit between
 // controllers (HTTP concerns) and repositories (data access concerns).
@@ -24,7 +27,8 @@ async function createUser(payload) {
   });
 }
 
-module.exports = {
-  listUsers,
+<% if (isEsm) { %>export default {
+<% } else { %>module.exports = {
+<% } %>  listUsers,
   createUser
 };

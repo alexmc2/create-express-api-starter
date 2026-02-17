@@ -1,0 +1,18 @@
+<% if (educational) { %>// File overview: Parses PORT into a usable integer with a safe fallback.
+<% } %>
+<% if (educational) { %>// Keep this helper small and pure so entrypoint code stays easy to scan.
+<% } %>function getPort(value, fallback = 3000) {
+  const parsed = Number(value);
+
+  if (Number.isInteger(parsed) && parsed > 0) {
+    return parsed;
+  }
+
+  return fallback;
+}
+
+<% if (isEsm) { %>export { getPort };
+<% } else { %>module.exports = {
+  getPort
+};
+<% } %>

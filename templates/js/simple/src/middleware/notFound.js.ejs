@@ -1,6 +1,8 @@
 <% if (educational) { %>// File overview: Handles unmatched routes by forwarding a 404 error to the central error handler.
 <% } %>
-const AppError = require('../errors/AppError');
+<% if (isEsm) { %>import AppError from '../errors/AppError.js';
+<% } else { %>const AppError = require('../errors/AppError');
+<% } %>
 
 <% if (educational) { %>// This middleware runs only when no route matched the request.
 // It forwards a 404 error to the central error handler for a uniform response.
@@ -8,4 +10,6 @@ const AppError = require('../errors/AppError');
   next(new AppError(404, 'Route not found.'));
 }
 
-module.exports = notFound;
+<% if (isEsm) { %>export default notFound;
+<% } else { %>module.exports = notFound;
+<% } %>

@@ -1,8 +1,12 @@
 <% if (educational) { %>// File overview: Creates the target PostgreSQL database if it does not already exist.
 <% } %>
-require('dotenv').config();
+<% if (isEsm) { %>import 'dotenv/config';
+
+import { Pool } from 'pg';
+<% } else { %>require('dotenv').config();
 
 const { Pool } = require('pg');
+<% } %>
 
 async function run() {
   const databaseUrl = process.env.DATABASE_URL;

@@ -1,6 +1,15 @@
 <% if (educational) { %>// File overview: Builds and configures the Express app (middleware, routes, and error pipeline).
 <% } %>
-const express = require('express');
+<% if (isEsm) { %>import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import morgan from 'morgan';
+
+import errorHandler from './middleware/errorHandler.js';
+import notFound from './middleware/notFound.js';
+import healthRouter from './routes/health.js';
+import usersRouter from './routes/users.js';
+<% } else { %>const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -9,6 +18,7 @@ const healthRouter = require('./routes/health');
 const usersRouter = require('./routes/users');
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
+<% } %>
 
 const app = express();
 
@@ -42,4 +52,6 @@ app.use('/api/users', usersRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-module.exports = app;
+<% if (isEsm) { %>export default app;
+<% } else { %>module.exports = app;
+<% } %>

@@ -1,12 +1,19 @@
 <% if (educational) { %>// File overview: Application entry point that loads environment variables and starts the HTTP server.
 <% } %>
-<% if (educational) { %>// Load variables from .env before other modules read process.env values.
+<% if (isEsm) { %><% if (educational) { %>// Load variables from .env before other modules read process.env values.
+<% } %>import 'dotenv/config';
+
+import app from './app.js';
+import { getPort } from './utils/getPort.js';
+<% } else { %><% if (educational) { %>// Load variables from .env before other modules read process.env values.
 <% } %>require('dotenv').config();
 
 const app = require('./app');
+const { getPort } = require('./utils/getPort');
+<% } %>
 
 <% if (educational) { %>// Read the server port from PORT, defaulting to 3000 for local development.
-<% } %>const port = Number(process.env.PORT) || 3000;
+<% } %>const port = getPort(process.env.PORT, 3000);
 
 <% if (educational) { %>// Start the HTTP server and listen for incoming requests.
 <% } %>app.listen(port, () => {
