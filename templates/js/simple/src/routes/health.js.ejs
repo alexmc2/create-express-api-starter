@@ -1,8 +1,12 @@
 <% if (educational) { %>// File overview: Registers the health-check route used to confirm the API process is running.
 <% } %>
-const express = require('express');
+<% if (isEsm) { %>import { Router } from 'express';
+<% } else { %>const express = require('express');
+<% } %>
 
-const router = express.Router();
+<% if (isEsm) { %>const router = Router();
+<% } else { %>const router = express.Router();
+<% } %>
 
 <% if (educational) { %>// Health-check endpoint used by monitors, load balancers, and container
 // platforms to verify that the API process is running.
@@ -10,4 +14,6 @@ const router = express.Router();
   res.status(200).json({ ok: true });
 });
 
-module.exports = router;
+<% if (isEsm) { %>export default router;
+<% } else { %>module.exports = router;
+<% } %>

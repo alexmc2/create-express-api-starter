@@ -34,4 +34,6 @@
   res.status(status).json(payload);
 }
 
-module.exports = errorHandler;
+<% if (isEsm) { %>export default errorHandler;
+<% } else { %>module.exports = errorHandler;
+<% } %>

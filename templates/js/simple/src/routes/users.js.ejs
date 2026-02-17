@@ -1,11 +1,18 @@
 <% if (educational) { %>// File overview: Defines /api/users routes, including request validation and repository calls.
 <% } %>
-const express = require('express');
+<% if (isEsm) { %>import { Router } from 'express';
+
+import AppError from '../errors/AppError.js';
+import usersRepository from '../repositories/usersRepository.js';
+<% } else { %>const express = require('express');
 
 const usersRepository = require('../repositories/usersRepository');
 const AppError = require('../errors/AppError');
+<% } %>
 
-const router = express.Router();
+<% if (isEsm) { %>const router = Router();
+<% } else { %>const router = express.Router();
+<% } %>
 
 <% if (educational) { %>// Async route handlers should pass failures to next(error) so the
 // centralized error handler can return a consistent HTTP response.
@@ -40,4 +47,6 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-module.exports = router;
+<% if (isEsm) { %>export default router;
+<% } else { %>module.exports = router;
+<% } %>

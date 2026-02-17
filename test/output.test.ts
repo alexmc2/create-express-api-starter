@@ -8,6 +8,7 @@ const ANSI_PATTERN = /\u001b\[[0-9;]*m/g;
 const baseSelection: UserSelections = {
   projectName: 'my-api',
   language: 'js',
+  moduleSystem: 'commonjs',
   architecture: 'simple',
   databaseMode: 'memory',
   educational: true,

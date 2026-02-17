@@ -1,14 +1,22 @@
 <% if (educational) { %>// File overview: Maps /api/users endpoints to controller methods in the MVC request flow.
 <% } %>
-const express = require('express');
+<% if (isEsm) { %>import { Router } from 'express';
+
+import usersController from '../controllers/usersController.js';
+<% } else { %>const express = require('express');
 
 const usersController = require('../controllers/usersController');
+<% } %>
 
-const router = express.Router();
+<% if (isEsm) { %>const router = Router();
+<% } else { %>const router = express.Router();
+<% } %>
 
 <% if (educational) { %>// Route files should map URLs to controller functions and nothing more.
 // Keeping them thin makes the API surface quick to scan and reason about.
 <% } %>router.get('/', usersController.listUsers);
 router.post('/', usersController.createUser);
 
-module.exports = router;
+<% if (isEsm) { %>export default router;
+<% } else { %>module.exports = router;
+<% } %>

@@ -2,12 +2,18 @@
 <% } %>
 <% if (educational) { %>// Supertest sends HTTP requests directly to the Express app instance.
 // This keeps tests fast and isolated because no network port is opened.
-<% } %>const request = require('supertest');
+<% } %><% if (isEsm) { %>import { describe, expect, test<% if (isPostgres) { %>, afterAll<% } %> } from '@jest/globals';
+import request from 'supertest';
+
+import app from '../src/app.js';
+<% if (isPostgres) { %>import pool from '../src/db/pool.js';
+<% } %><% } else { %>const request = require('supertest');
 
 const app = require('../src/app');
 <% if (isPostgres) { %>const pool = require('../src/db/pool');
-<% } %>
-<% if (isPostgres) { %>afterAll(async () => {
+<% } %><% } %>
+<% if (isPostgres) { %>
+afterAll(async () => {
   await pool.end();
 });
 

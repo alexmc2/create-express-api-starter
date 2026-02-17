@@ -2,7 +2,9 @@
 <% } %>
 <% if (isPostgres) { %><% if (educational) { %>// Keep SQL statements in the repository so HTTP layers stay focused on requests
 // and responses. This separation makes the code easier to test and maintain.
-<% } %>const pool = require('../db/pool');
+<% } %><% if (isEsm) { %>import pool from '../db/pool.js';
+<% } else { %>const pool = require('../db/pool');
+<% } %>
 
 async function getAll() {
   const result = await pool.query('SELECT id, name, email FROM users ORDER BY id ASC');
@@ -19,8 +21,9 @@ async function create({ name, email }) {
   return result.rows[0];
 }
 
-module.exports = {
-  getAll,
+<% if (isEsm) { %>export default {
+<% } else { %>module.exports = {
+<% } %>  getAll,
   create
 };
 <% } else { %><% if (educational) { %>// Keep data access in one place so the rest of the app does not depend on
@@ -58,8 +61,9 @@ async function create({ name, email }) {
   return user;
 }
 
-module.exports = {
-  getAll,
+<% if (isEsm) { %>export default {
+<% } else { %>module.exports = {
+<% } %>  getAll,
   create
 };
 <% } %>

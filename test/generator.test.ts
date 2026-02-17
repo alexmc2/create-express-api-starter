@@ -22,6 +22,7 @@ function getExpectedUsername(): string {
 const jsSimpleMemory: TemplateConfig = {
   projectName: 'my-api',
   language: 'js',
+  moduleSystem: 'commonjs',
   architecture: 'simple',
   educational: true,
   databaseMode: 'memory',
@@ -38,6 +39,7 @@ describe('generator', () => {
       const expectedFiles = [
         'src/app.js',
         'src/server.js',
+        'src/utils/getPort.js',
         'package.json',
         'README.md',
         '__tests__/app.test.js',
@@ -63,6 +65,7 @@ describe('generator', () => {
         config: {
           projectName: 'my-api-ts',
           language: 'ts',
+          moduleSystem: 'commonjs',
           architecture: 'mvc',
           educational: false,
           databaseMode: 'postgres-docker',
@@ -108,6 +111,46 @@ describe('generator', () => {
       expect(
         await fs.pathExists(path.join(targetDir, 'scripts/dbReset.js')),
       ).toBe(true);
+      expect(
+        await fs.pathExists(path.join(targetDir, 'src/utils/getPort.ts')),
+      ).toBe(true);
+    } finally {
+      await fs.remove(root);
+    }
+  });
+
+  it('renders JS simple ES Modules project with ESM-safe test configuration', async () => {
+    const root = await createTempRoot('create-express-api-starter-');
+    const targetDir = path.join(root, 'my-api-esm');
+
+    try {
+      await generateProject({
+        config: {
+          projectName: 'my-api-esm',
+          language: 'js',
+          moduleSystem: 'esm',
+          architecture: 'simple',
+          educational: true,
+          databaseMode: 'memory',
+        },
+        targetDir,
+      });
+
+      const packageJson = await fs.readJson(path.join(targetDir, 'package.json'));
+      expect(packageJson.type).toBe('module');
+      expect(packageJson.scripts.test).toBe(
+        'node --experimental-vm-modules ./node_modules/jest/bin/jest.js',
+      );
+
+      const appFile = await fs.readFile(path.join(targetDir, 'src/app.js'), 'utf8');
+      expect(appFile).toContain("import express from 'express';");
+      expect(appFile).toContain('export default app;');
+
+      const jestConfig = await fs.readFile(
+        path.join(targetDir, 'jest.config.js'),
+        'utf8',
+      );
+      expect(jestConfig).toContain('export default');
     } finally {
       await fs.remove(root);
     }
@@ -122,6 +165,7 @@ describe('generator', () => {
         config: {
           projectName: 'my-api-psql',
           language: 'js',
+          moduleSystem: 'commonjs',
           architecture: 'simple',
           educational: true,
           databaseMode: 'postgres-psql',
@@ -191,6 +235,7 @@ describe('generator', () => {
         config: {
           projectName: 'dry-run-api',
           language: 'js',
+          moduleSystem: 'commonjs',
           architecture: 'mvc',
           educational: true,
           databaseMode: 'memory',

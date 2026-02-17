@@ -1,4 +1,6 @@
-module.exports = {
+<% if (isEsm) { %>export default {
+<% } else { %>module.exports = {
+<% } %>
   testEnvironment: 'node'<% if (isPostgres) { %>,
   setupFiles: ['dotenv/config']<% } %>
 };

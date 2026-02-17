@@ -30,6 +30,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
     return {
       projectName: parsedArgs.projectName ?? DEFAULT_PROJECT_NAME,
       language: DEFAULT_SELECTIONS.language,
+      moduleSystem: DEFAULT_SELECTIONS.moduleSystem,
       architecture: DEFAULT_SELECTIONS.architecture,
       databaseMode: DEFAULT_SELECTIONS.databaseMode,
       educational: DEFAULT_SELECTIONS.educational,
@@ -79,6 +80,26 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
       ]
     })
   ) as UserSelections['language'];
+
+  const moduleSystem =
+    language === 'js'
+      ? (unwrapPrompt(
+          await select({
+            message: 'Module system',
+            initialValue: DEFAULT_SELECTIONS.moduleSystem,
+            options: [
+              {
+                value: 'commonjs',
+                label: 'CommonJS'
+              },
+              {
+                value: 'esm',
+                label: 'ES Modules'
+              }
+            ]
+          })
+        ) as UserSelections['moduleSystem'])
+      : 'commonjs';
 
   const architecture = unwrapPrompt(
     await select({
@@ -148,6 +169,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
   return {
     projectName,
     language,
+    moduleSystem,
     architecture,
     databaseMode,
     educational,

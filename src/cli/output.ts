@@ -5,6 +5,7 @@ import {
   architectureLabel,
   databaseLabel,
   languageLabel,
+  moduleSystemLabel,
 } from '../core/labels.js';
 import type { GenerationPlan, UserSelections } from '../core/types.js';
 import {
@@ -49,6 +50,11 @@ export function printDryRunPlan(
   selection: UserSelections,
   plan: GenerationPlan,
 ): void {
+  const languageValue =
+    selection.language === 'js'
+      ? `${languageLabel(selection.language)} (${moduleSystemLabel(selection.moduleSystem)})`
+      : languageLabel(selection.language);
+
   const summaryLines = formatKeyValueLines([
     {
       key: 'Target',
@@ -57,7 +63,7 @@ export function printDryRunPlan(
     },
     {
       key: 'Language',
-      value: languageLabel(selection.language),
+      value: languageValue,
       tone: 'accent',
     },
     {
@@ -96,6 +102,14 @@ export function printDryRunPlan(
 }
 
 export function printNextSteps(selection: UserSelections): void {
+  const stackParts = [
+    selection.language === 'js'
+      ? `${languageLabel(selection.language)} (${moduleSystemLabel(selection.moduleSystem)})`
+      : languageLabel(selection.language),
+    architectureLabel(selection.architecture),
+    databaseLabel(selection.databaseMode),
+  ];
+
   const summaryLines = formatKeyValueLines([
     {
       key: 'Project',
@@ -104,11 +118,7 @@ export function printNextSteps(selection: UserSelections): void {
     },
     {
       key: 'Stack',
-      value: [
-        languageLabel(selection.language),
-        architectureLabel(selection.architecture),
-        databaseLabel(selection.databaseMode),
-      ].join(' | '),
+      value: stackParts.join(' | '),
       tone: 'accent',
     },
     {

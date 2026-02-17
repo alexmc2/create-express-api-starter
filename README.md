@@ -68,6 +68,7 @@ The CLI walks you through these choices interactively, or you can skip them all 
 | Option | Choices | Default |
 |---|---|---|
 | **Language** | JavaScript, TypeScript | JavaScript |
+| **Module system (JavaScript)** | CommonJS, ES Modules | CommonJS |
 | **Architecture** | Simple (flat), MVC (layered) | Simple |
 | **Database** | In-memory, Postgres (psql), Postgres (Docker) | In-memory |
 | **Educational comments** | On, Off | On |
@@ -96,6 +97,8 @@ my-api/
 │   ├── routes/
 │   │   ├── health.js       # GET /health
 │   │   └── users.js        # GET & POST /api/users
+│   ├── utils/
+│   │   └── getPort.js      # Shared helpers (for example, PORT parsing)
 │   └── middleware/
 │       ├── notFound.js     # 404 handler
 │       └── errorHandler.js # Centralised error handler
@@ -143,7 +146,7 @@ In PostgreSQL mode, duplicate values for unique fields (like `email`) return `40
 |---|---|---|
 | `npm run dev` | `node --watch src/server.js` | Dev server with auto-restart |
 | `npm start` | `node src/server.js` | Production start |
-| `npm test` | `jest` | Run test suite |
+| `npm test` | `jest` (CommonJS) or `node --experimental-vm-modules ./node_modules/jest/bin/jest.js` (ES Modules) | Run test suite |
 
 **TypeScript projects:**
 
@@ -221,13 +224,13 @@ These are designed to be helpful without being overwhelming. Turn them off if th
 
 ## Design decisions
 
-### Generated projects use CommonJS
+### JavaScript module system is a choice
 
-Generated projects use `require()` / `module.exports` (JavaScript) or compile TypeScript to CommonJS output. This is a deliberate choice for v0.1:
+JavaScript projects can now be generated as either CommonJS (`require` / `module.exports`) or ES Modules (`import` / `export` + `"type": "module"`).
 
-- Most Express tutorials and Stack Overflow answers use CommonJS patterns
-- Jest's ESM support is still experimental - CommonJS avoids that complexity entirely
-- Beginners don't need to debug ESM resolution issues on day one
+- CommonJS remains the default for beginner-friendly parity with most Express tutorials
+- ES Modules are available from the CLI when you want modern module syntax from day one
+- TypeScript templates still compile to CommonJS output for now
 
 ### Opinionated but transparent
 

@@ -1,6 +1,8 @@
 <% if (educational) { %>// File overview: Executes the reset workflow by running setup and seed scripts in order.
 <% } %>
-const { spawn } = require('node:child_process');
+<% if (isEsm) { %>import { spawn } from 'node:child_process';
+<% } else { %>const { spawn } = require('node:child_process');
+<% } %>
 
 <% if (educational) { %>// Run an npm script and stream output to this terminal.
 // Wrapping spawn in a Promise lets us await each step in order.

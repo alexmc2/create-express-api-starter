@@ -59,6 +59,7 @@ async function runCli(argv: string[]): Promise<void> {
   const templateConfig = {
     projectName: selections.projectName,
     language: selections.language,
+    moduleSystem: selections.moduleSystem,
     architecture: selections.architecture,
     educational: selections.educational,
     databaseMode: selections.databaseMode

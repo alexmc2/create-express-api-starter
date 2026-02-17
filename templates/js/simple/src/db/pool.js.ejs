@@ -2,7 +2,9 @@
 <% } %>
 <% if (educational) { %>// Create one shared connection pool for the whole application.
 // Reusing connections is faster and avoids exhausting database limits.
-<% } %>const { Pool } = require('pg');
+<% } %><% if (isEsm) { %>import { Pool } from 'pg';
+<% } else { %>const { Pool } = require('pg');
+<% } %>
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required for Postgres mode.');
@@ -12,4 +14,6 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-module.exports = pool;
+<% if (isEsm) { %>export default pool;
+<% } else { %>module.exports = pool;
+<% } %>
