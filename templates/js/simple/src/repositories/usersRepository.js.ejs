@@ -1,5 +1,7 @@
-<% if (isPostgres) { %><% if (educational) { %>// The repository isolates all database queries in one place.
-// Route handlers call these functions instead of writing SQL directly.
+<% if (educational) { %>// File overview: Encapsulates user data access so route code stays focused on HTTP concerns.
+<% } %>
+<% if (isPostgres) { %><% if (educational) { %>// Keep SQL statements in the repository so HTTP layers stay focused on requests
+// and responses. This separation makes the code easier to test and maintain.
 <% } %>const pool = require('../db/pool');
 
 async function getAll() {
@@ -8,7 +10,7 @@ async function getAll() {
 }
 
 async function create({ name, email }) {
-<% if (educational) { %>  // Use parameterised queries ($1, $2) to prevent SQL injection.
+<% if (educational) { %>  // Use parameter placeholders ($1, $2) so pg binds values safely.
 <% } %>  const result = await pool.query(
     'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email',
     [name, email]
@@ -21,9 +23,9 @@ module.exports = {
   getAll,
   create
 };
-<% } else { %><% if (educational) { %>// The repository layer keeps data access separate from route logic.
-// This in-memory version stores data in an array — swap it for a real
-// database later by changing only this file.
+<% } else { %><% if (educational) { %>// Keep data access in one place so the rest of the app does not depend on
+// storage details. This in-memory version can be replaced later with a real
+// database by changing this file only.
 <% } %>const users = [
   {
     id: 1,

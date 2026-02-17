@@ -1,6 +1,10 @@
+<% if (educational) { %>// File overview: Executes the reset workflow by running setup and seed scripts in order.
+<% } %>
 const { spawn } = require('node:child_process');
 
-function run(command, args) {
+<% if (educational) { %>// Run an npm script and stream output to this terminal.
+// Wrapping spawn in a Promise lets us await each step in order.
+<% } %>function run(command, args) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       stdio: 'inherit',
@@ -21,13 +25,16 @@ function run(command, args) {
 }
 
 async function main() {
-<% if (isDocker) { %>  await run('npm', ['run', 'db:down']);
+<% if (isDocker) { %><% if (educational) { %>  // Restart the container so reset starts from a clean database state.
+<% } %>  await run('npm', ['run', 'db:down']);
   await run('npm', ['run', 'db:up']);
+<% } %><% if (educational) { %>  // Recreate tables first, then insert the sample data.
 <% } %>  await run('npm', ['run', 'db:setup']);
   await run('npm', ['run', 'db:seed']);
 }
 
 main().catch((error) => {
-  console.error(error.message);
+<% if (educational) { %>  // Child scripts print detailed logs, so this is a short summary.
+<% } %>  console.error(error.message);
   process.exit(1);
 });

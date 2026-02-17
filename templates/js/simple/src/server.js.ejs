@@ -1,12 +1,14 @@
-<% if (educational) { %>// Load environment variables from .env into process.env before anything else runs.
+<% if (educational) { %>// File overview: Application entry point that loads environment variables and starts the HTTP server.
+<% } %>
+<% if (educational) { %>// Load variables from .env before other modules read process.env values.
 <% } %>require('dotenv').config();
 
 const app = require('./app');
 
-<% if (educational) { %>// Use the PORT from .env if set, otherwise default to 3000.
+<% if (educational) { %>// Read the server port from PORT, defaulting to 3000 for local development.
 <% } %>const port = Number(process.env.PORT) || 3000;
 
-<% if (educational) { %>// Start listening for incoming HTTP requests.
+<% if (educational) { %>// Start the HTTP server and listen for incoming requests.
 <% } %>app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

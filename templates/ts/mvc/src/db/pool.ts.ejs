@@ -1,5 +1,7 @@
-<% if (educational) { %>// Create a connection pool so the app reuses database connections
-// instead of opening a new one for every query.
+<% if (educational) { %>// File overview: Creates and exports a shared PostgreSQL connection pool for repository queries.
+<% } %>
+<% if (educational) { %>// Create one shared connection pool for the whole application.
+// Reusing connections is faster and avoids exhausting database limits.
 <% } %>import { Pool } from 'pg';
 
 const databaseUrl = process.env.DATABASE_URL;

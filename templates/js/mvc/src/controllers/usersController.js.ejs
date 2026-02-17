@@ -1,13 +1,15 @@
+<% if (educational) { %>// File overview: Handles /users HTTP requests and delegates business logic to the service layer.
+<% } %>
 const usersService = require('../services/usersService');
 
-<% if (educational) { %>// Controllers handle HTTP concerns (req, res, status codes) and delegate
-// business logic to the service layer. This keeps each layer focused.
+<% if (educational) { %>// Controllers translate HTTP requests into service calls and convert service
+// results back into HTTP responses. Business rules remain in the service layer.
 <% } %>async function listUsers(_req, res, next) {
   try {
     const users = await usersService.listUsers();
     res.status(200).json(users);
   } catch (error) {
-<% if (educational) { %>    // Forward errors to Express's error-handling middleware.
+<% if (educational) { %>    // Pass errors to next(error) so the central error handler can respond.
 <% } %>    next(error);
   }
 }

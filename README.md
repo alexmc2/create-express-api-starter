@@ -19,7 +19,7 @@ The Express ecosystem has plenty of starter repos and outdated generators, but v
 
 `create-express-api-starter` is an interactive CLI that generates a complete Express API project. It asks a few questions, then writes a fully working project with:
 
-- A properly structured Express server with middleware already configured
+- A well-structured Express server with middleware already configured
 - Health check and example resource routes with CRUD operations
 - Error handling that returns consistent JSON responses
 - A test suite that passes out of the box
@@ -208,10 +208,12 @@ npm run db:down     # Stop and remove container + data
 When enabled (the default), the generated code includes short inline comments explaining *why* things are done a certain way:
 
 ```javascript
-// Parse incoming JSON request bodies so req.body is available
+// Parse JSON request bodies so route handlers can read data from req.body.
+// Without this middleware, req.body is undefined for JSON requests.
 app.use(express.json());
 
-// Set security headers - protects against common web vulnerabilities
+// Add common HTTP security headers.
+// Helmet applies safe defaults that reduce exposure to common web attacks.
 app.use(helmet());
 ```
 

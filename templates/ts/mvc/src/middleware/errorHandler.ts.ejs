@@ -1,3 +1,5 @@
+<% if (educational) { %>// File overview: Converts thrown errors into consistent JSON HTTP responses for clients.
+<% } %>
 import type { ErrorRequestHandler } from 'express';
 
 interface HttpError extends Error {
@@ -6,11 +8,11 @@ interface HttpError extends Error {
   detail?: string;
 }
 
-<% if (educational) { %>// Express recognises this as an error handler because it has four parameters.
-// Any error passed to next(error) anywhere in the app ends up here.
+<% if (educational) { %>// Express treats middleware with four parameters as an error handler.
+// Any error passed to next(error) in the app is routed to this function.
 <% } %>const errorHandler: ErrorRequestHandler = (error: HttpError, _req, res, _next) => {
-<% if (educational) { %>  // Postgres uses error code 23505 for UNIQUE constraint violations.
-  // Returning 409 helps API users understand this is a data conflict.
+<% if (educational) { %>  // PostgreSQL error code 23505 means a UNIQUE constraint was violated.
+  // Returning HTTP 409 tells clients that the request conflicts with existing data.
 <% } %>  if (error?.code === '23505') {
     const detail = typeof error?.detail === 'string' ? error.detail : '';
     const message = detail.includes('email')
@@ -35,8 +37,8 @@ interface HttpError extends Error {
     message
   };
 
-<% if (educational) { %>  // Include the stack trace in development for easier debugging,
-  // but hide it in production to avoid leaking internal details.
+<% if (educational) { %>  // Include stack traces in development to speed up debugging.
+  // Omit them in production so internal implementation details stay private.
 <% } %>  if (process.env.NODE_ENV === 'development' && typeof error?.stack === 'string') {
     payload.stack = error.stack;
   }
