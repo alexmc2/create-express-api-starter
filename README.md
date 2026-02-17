@@ -57,6 +57,7 @@ cd my-api
 cp .env.example .env
 npm run dev    # Starts the dev server with watch mode
 npm test       # Runs the test suite
+npm run lint   # Runs ESLint checks
 ```
 
 Your API is live at `http://localhost:3000`. Hit `http://localhost:3000/health` to confirm.
@@ -106,6 +107,7 @@ my-api/
 │   └── app.test.js         # Health check and users endpoint tests
 ├── .env.example
 ├── .gitignore
+├── .eslintrc.cjs
 ├── package.json
 ├── README.md               # Teaches you how the project works
 └── jest.config.js
@@ -147,6 +149,7 @@ In PostgreSQL mode, duplicate values for unique fields (like `email`) return `40
 | `npm run dev` | `node --watch src/server.js` | Dev server with auto-restart |
 | `npm start` | `node src/server.js` | Production start |
 | `npm test` | `jest` (CommonJS) or `node --experimental-vm-modules ./node_modules/jest/bin/jest.js` (ES Modules) | Run test suite |
+| `npm run lint` | `eslint .` | Lint JavaScript files |
 
 **TypeScript projects:**
 
@@ -156,6 +159,7 @@ In PostgreSQL mode, duplicate values for unique fields (like `email`) return `40
 | `npm run build` | `tsc` | Compile to JavaScript |
 | `npm start` | `node dist/server.js` | Production start (compiled) |
 | `npm test` | `jest` | Run test suite |
+| `npm run lint` | `eslint . --ext .ts` | Lint TypeScript files |
 
 ### Tests
 
@@ -260,6 +264,7 @@ The scaffold gives you enough to start building immediately, but doesn't try to 
 
 - Express 4
 - Jest + Supertest for testing
+- ESLint for static analysis
 - `@swc/jest` for TypeScript test transforms
 - `pg` for PostgreSQL connectivity (when applicable)
 
@@ -283,7 +288,7 @@ The test suite includes integration tests that generate real projects, install d
 After v0.1 is stable:
 
 - Prisma / Drizzle ORM integration as an optional database mode
-- ESLint + Prettier defaults
+- Prettier defaults
 - Additional example resources
 - Optional testing framework choice (Jest vs Vitest)
 - Service-layer and layered architecture templates

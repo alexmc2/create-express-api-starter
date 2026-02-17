@@ -28,8 +28,10 @@ describe.sequential('generated project integration', () => {
         });
 
         await execa('npm', ['install', '--no-audit', '--no-fund'], { cwd: targetDir });
+        const lintRun = await execa('npm', ['run', 'lint'], { cwd: targetDir });
         const testRun = await execa('npm', ['test'], { cwd: targetDir });
 
+        expect(lintRun.exitCode).toBe(0);
         expect(testRun.exitCode).toBe(0);
       } finally {
         await fs.remove(root);
@@ -58,9 +60,11 @@ describe.sequential('generated project integration', () => {
         });
 
         await execa('npm', ['install', '--no-audit', '--no-fund'], { cwd: targetDir });
+        const lintRun = await execa('npm', ['run', 'lint'], { cwd: targetDir });
         const buildRun = await execa('npm', ['run', 'build'], { cwd: targetDir });
         const testRun = await execa('npm', ['test'], { cwd: targetDir });
 
+        expect(lintRun.exitCode).toBe(0);
         expect(buildRun.exitCode).toBe(0);
         expect(testRun.exitCode).toBe(0);
       } finally {
@@ -90,8 +94,10 @@ describe.sequential('generated project integration', () => {
         });
 
         await execa('npm', ['install', '--no-audit', '--no-fund'], { cwd: targetDir });
+        const lintRun = await execa('npm', ['run', 'lint'], { cwd: targetDir });
         const testRun = await execa('npm', ['test'], { cwd: targetDir });
 
+        expect(lintRun.exitCode).toBe(0);
         expect(testRun.exitCode).toBe(0);
       } finally {
         await fs.remove(root);
