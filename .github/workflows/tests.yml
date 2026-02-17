@@ -33,8 +33,5 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Build CLI
-        run: npm run build
-
       - name: Verify package contents
         run: npm pack --dry-run

@@ -33,9 +33,6 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Build CLI
-        run: npm run build
-
       - name: Validate npm token secret
         run: |
           if [ -z "${NODE_AUTH_TOKEN}" ]; then

@@ -41,7 +41,7 @@
     "test:unit": "vitest run --exclude test/integration.generated-projects.test.ts",
     "pack": "npm pack",
     "prepack": "npm run build",
-    "prepublishOnly": "npm run test:unit && npm run build"
+    "prepublishOnly": "npm run test:unit"
   },
   "publishConfig": {
     "access": "public"
