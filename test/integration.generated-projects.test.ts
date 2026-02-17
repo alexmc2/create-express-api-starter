@@ -20,6 +20,7 @@ describe.sequential('generated project integration', () => {
             projectName: 'js-api',
             language: 'js',
             moduleSystem: 'commonjs',
+            jsDevWatcher: 'node-watch',
             architecture: 'simple',
             educational: true,
             databaseMode: 'memory'
@@ -50,6 +51,7 @@ describe.sequential('generated project integration', () => {
             projectName: 'ts-api',
             language: 'ts',
             moduleSystem: 'commonjs',
+            jsDevWatcher: 'node-watch',
             architecture: 'simple',
             educational: true,
             databaseMode: 'memory'
@@ -82,6 +84,7 @@ describe.sequential('generated project integration', () => {
             projectName: 'js-api-esm',
             language: 'js',
             moduleSystem: 'esm',
+            jsDevWatcher: 'node-watch',
             architecture: 'simple',
             educational: true,
             databaseMode: 'memory'

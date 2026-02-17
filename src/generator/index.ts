@@ -6,6 +6,7 @@ import ejs from 'ejs';
 import {
   architectureLabel,
   databaseLabel,
+  jsDevWatcherLabel,
   languageLabel,
   moduleSystemLabel,
 } from '../core/labels.js';
@@ -135,6 +136,8 @@ function getOsUsername(): string {
 function templateData(config: TemplateConfig): Record<string, unknown> {
   const isTypeScript = config.language === 'ts';
   const isEsm = config.moduleSystem === 'esm';
+  const isJavaScript = config.language === 'js';
+  const useNodemon = isJavaScript && config.jsDevWatcher === 'nodemon';
   const isPostgres = config.databaseMode !== 'memory';
   const isDocker = config.databaseMode === 'postgres-docker';
   const isPsql = config.databaseMode === 'postgres-psql';
@@ -156,6 +159,11 @@ function templateData(config: TemplateConfig): Record<string, unknown> {
     moduleSystemLabel: moduleSystemLabel(config.moduleSystem),
     architectureLabel: architectureLabel(config.architecture),
     databaseLabel: databaseLabel(config.databaseMode),
+    jsDevWatcherLabel: jsDevWatcherLabel(config.jsDevWatcher),
+    jsDevCommand: useNodemon
+      ? 'nodemon src/server.js'
+      : 'node --watch src/server.js',
+    useNodemon,
     databaseUrl:
       config.databaseMode === 'postgres-docker'
         ? `postgres://postgres:postgres@localhost:5433/${dbName}`

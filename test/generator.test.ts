@@ -23,6 +23,7 @@ const jsSimpleMemory: TemplateConfig = {
   projectName: 'my-api',
   language: 'js',
   moduleSystem: 'commonjs',
+  jsDevWatcher: 'node-watch',
   architecture: 'simple',
   educational: true,
   databaseMode: 'memory',
@@ -66,6 +67,7 @@ describe('generator', () => {
           projectName: 'my-api-ts',
           language: 'ts',
           moduleSystem: 'commonjs',
+          jsDevWatcher: 'node-watch',
           architecture: 'mvc',
           educational: false,
           databaseMode: 'postgres-docker',
@@ -129,6 +131,7 @@ describe('generator', () => {
           projectName: 'my-api-esm',
           language: 'js',
           moduleSystem: 'esm',
+          jsDevWatcher: 'node-watch',
           architecture: 'simple',
           educational: true,
           databaseMode: 'memory',
@@ -138,6 +141,7 @@ describe('generator', () => {
 
       const packageJson = await fs.readJson(path.join(targetDir, 'package.json'));
       expect(packageJson.type).toBe('module');
+      expect(packageJson.engines.node).toBe('>=20.13');
       expect(packageJson.scripts.test).toBe(
         'node --experimental-vm-modules ./node_modules/jest/bin/jest.js',
       );
@@ -156,6 +160,36 @@ describe('generator', () => {
     }
   });
 
+  it('renders JS project with nodemon dev watcher when selected', async () => {
+    const root = await createTempRoot('create-express-api-starter-');
+    const targetDir = path.join(root, 'my-api-nodemon');
+
+    try {
+      await generateProject({
+        config: {
+          projectName: 'my-api-nodemon',
+          language: 'js',
+          moduleSystem: 'commonjs',
+          jsDevWatcher: 'nodemon',
+          architecture: 'simple',
+          educational: true,
+          databaseMode: 'memory',
+        },
+        targetDir,
+      });
+
+      const packageJson = await fs.readJson(path.join(targetDir, 'package.json'));
+      expect(packageJson.scripts.dev).toBe('nodemon src/server.js');
+      expect(packageJson.engines.node).toBe('>=20');
+      expect(packageJson.devDependencies.nodemon).toBeDefined();
+
+      const readme = await fs.readFile(path.join(targetDir, 'README.md'), 'utf8');
+      expect(readme).toContain('Dev watcher: nodemon');
+    } finally {
+      await fs.remove(root);
+    }
+  });
+
   it('renders JS simple postgres-psql project with osUsername in README and .env', async () => {
     const root = await createTempRoot('create-express-api-starter-');
     const targetDir = path.join(root, 'my-api-psql');
@@ -166,6 +200,7 @@ describe('generator', () => {
           projectName: 'my-api-psql',
           language: 'js',
           moduleSystem: 'commonjs',
+          jsDevWatcher: 'node-watch',
           architecture: 'simple',
           educational: true,
           databaseMode: 'postgres-psql',
@@ -236,6 +271,7 @@ describe('generator', () => {
           projectName: 'dry-run-api',
           language: 'js',
           moduleSystem: 'commonjs',
+          jsDevWatcher: 'node-watch',
           architecture: 'mvc',
           educational: true,
           databaseMode: 'memory',

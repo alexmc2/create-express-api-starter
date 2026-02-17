@@ -9,6 +9,7 @@ const baseSelection: UserSelections = {
   projectName: 'my-api',
   language: 'js',
   moduleSystem: 'commonjs',
+  jsDevWatcher: 'node-watch',
   architecture: 'simple',
   databaseMode: 'memory',
   educational: true,
