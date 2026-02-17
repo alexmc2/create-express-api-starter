@@ -4,6 +4,7 @@ import pc from 'picocolors';
 import {
   architectureLabel,
   databaseLabel,
+  jsDevWatcherLabel,
   languageLabel,
   moduleSystemLabel,
 } from '../core/labels.js';
@@ -55,7 +56,7 @@ export function printDryRunPlan(
       ? `${languageLabel(selection.language)} (${moduleSystemLabel(selection.moduleSystem)})`
       : languageLabel(selection.language);
 
-  const summaryLines = formatKeyValueLines([
+  const summaryEntries: Parameters<typeof formatKeyValueLines>[0] = [
     {
       key: 'Target',
       value: formatTargetPath(plan.targetDir),
@@ -76,6 +77,17 @@ export function printDryRunPlan(
       value: databaseLabel(selection.databaseMode),
       tone: 'accent',
     },
+  ];
+
+  if (selection.language === 'js') {
+    summaryEntries.push({
+      key: 'Dev watcher',
+      value: jsDevWatcherLabel(selection.jsDevWatcher),
+      tone: 'accent',
+    });
+  }
+
+  summaryEntries.push(
     {
       key: 'Educational',
       value: selection.educational ? 'On' : 'Off',
@@ -91,7 +103,9 @@ export function printDryRunPlan(
       value: selection.initGit ? 'Yes' : 'No',
       tone: selection.initGit ? 'success' : 'warn',
     },
-  ]);
+  );
+
+  const summaryLines = formatKeyValueLines(summaryEntries);
 
   const fileLines = plan.files.map((file) => `${pc.dim('-')} ${file.outputRelativePath}`);
 
@@ -110,7 +124,7 @@ export function printNextSteps(selection: UserSelections): void {
     databaseLabel(selection.databaseMode),
   ];
 
-  const summaryLines = formatKeyValueLines([
+  const summaryEntries: Parameters<typeof formatKeyValueLines>[0] = [
     {
       key: 'Project',
       value: selection.projectName,
@@ -126,7 +140,17 @@ export function printNextSteps(selection: UserSelections): void {
       value: selection.educational ? 'On' : 'Off',
       tone: selection.educational ? 'success' : 'muted',
     },
-  ]);
+  ];
+
+  if (selection.language === 'js') {
+    summaryEntries.push({
+      key: 'Dev watcher',
+      value: jsDevWatcherLabel(selection.jsDevWatcher),
+      tone: 'accent',
+    });
+  }
+
+  const summaryLines = formatKeyValueLines(summaryEntries);
 
   const nextStepCommands = buildNextStepCommands(selection);
 

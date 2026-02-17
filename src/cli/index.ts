@@ -60,6 +60,7 @@ async function runCli(argv: string[]): Promise<void> {
     projectName: selections.projectName,
     language: selections.language,
     moduleSystem: selections.moduleSystem,
+    jsDevWatcher: selections.jsDevWatcher,
     architecture: selections.architecture,
     educational: selections.educational,
     databaseMode: selections.databaseMode

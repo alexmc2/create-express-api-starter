@@ -31,6 +31,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
       projectName: parsedArgs.projectName ?? DEFAULT_PROJECT_NAME,
       language: DEFAULT_SELECTIONS.language,
       moduleSystem: DEFAULT_SELECTIONS.moduleSystem,
+      jsDevWatcher: DEFAULT_SELECTIONS.jsDevWatcher,
       architecture: DEFAULT_SELECTIONS.architecture,
       databaseMode: DEFAULT_SELECTIONS.databaseMode,
       educational: DEFAULT_SELECTIONS.educational,
@@ -101,6 +102,26 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
         ) as UserSelections['moduleSystem'])
       : 'commonjs';
 
+  const jsDevWatcher =
+    language === 'js'
+      ? (unwrapPrompt(
+          await select({
+            message: 'Dev watcher (JavaScript)',
+            initialValue: DEFAULT_SELECTIONS.jsDevWatcher,
+            options: [
+              {
+                value: 'node-watch',
+                label: 'node --watch (built-in)'
+              },
+              {
+                value: 'nodemon',
+                label: 'nodemon'
+              }
+            ]
+          })
+        ) as UserSelections['jsDevWatcher'])
+      : DEFAULT_SELECTIONS.jsDevWatcher;
+
   const architecture = unwrapPrompt(
     await select({
       message: 'Architecture',
@@ -170,6 +191,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
     projectName,
     language,
     moduleSystem,
+    jsDevWatcher,
     architecture,
     databaseMode,
     educational,

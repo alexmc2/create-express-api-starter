@@ -43,7 +43,7 @@ When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the
 # Interactive mode - answer a few questions
 npx @alexmc2/create-express-api-starter my-api
 
-# Accept all defaults (JavaScript, Simple architecture, In-memory DB)
+# Accept all defaults (JavaScript + node --watch, Simple architecture, In-memory DB)
 npx @alexmc2/create-express-api-starter my-api --yes
 
 # Preview what would be generated without writing anything
@@ -55,7 +55,7 @@ Then:
 ```bash
 cd my-api
 cp .env.example .env
-npm run dev    # Starts the dev server with watch mode
+npm run dev    # Starts the dev server with your selected watcher
 npm test       # Runs the test suite
 ```
 
@@ -69,6 +69,7 @@ The CLI walks you through these choices interactively, or you can skip them all 
 |---|---|---|
 | **Language** | JavaScript, TypeScript | JavaScript |
 | **Module system (JavaScript)** | CommonJS, ES Modules | CommonJS |
+| **Dev watcher (JavaScript)** | `node --watch`, `nodemon` | `node --watch` |
 | **Architecture** | Simple (flat), MVC (layered) | Simple |
 | **Database** | In-memory, Postgres (psql), Postgres (Docker) | In-memory |
 | **Educational comments** | On, Off | On |
@@ -144,9 +145,11 @@ In PostgreSQL mode, duplicate values for unique fields (like `email`) return `40
 
 | Script | Command | Purpose |
 |---|---|---|
-| `npm run dev` | `node --watch src/server.js` | Dev server with auto-restart |
+| `npm run dev` | `node --watch src/server.js` or `nodemon src/server.js` | Dev server with auto-restart (chosen in CLI) |
 | `npm start` | `node src/server.js` | Production start |
 | `npm test` | `jest` (CommonJS) or `node --experimental-vm-modules ./node_modules/jest/bin/jest.js` (ES Modules) | Run test suite |
+
+Choosing `nodemon` adds it to `devDependencies` automatically.
 
 **TypeScript projects:**
 
@@ -224,6 +227,15 @@ These are designed to be helpful without being overwhelming. Turn them off if th
 
 ## Design decisions
 
+### JavaScript dev watcher is a choice
+
+JavaScript projects can be generated with either:
+
+- `node --watch` (built-in, no extra dependency)
+- `nodemon` (classic workflow many developers already use)
+
+The generator asks this during setup and writes `npm run dev` accordingly.
+
 ### JavaScript module system is a choice
 
 JavaScript projects can now be generated as either CommonJS (`require` / `module.exports`) or ES Modules (`import` / `export` + `"type": "module"`).
@@ -244,7 +256,7 @@ The scaffold gives you enough to start building immediately, but doesn't try to 
 
 ### Requirements
 
-- **Node.js >= 20** (>= 20.13 for generated JavaScript projects using `node --watch`)
+- **Node.js >= 20** (>= 20.13 only when choosing `node --watch` for JavaScript dev mode)
 - **npm** (ships with Node)
 - **Docker** (only if using Postgres Docker mode)
 - **PostgreSQL + psql** (only if using Postgres psql mode)

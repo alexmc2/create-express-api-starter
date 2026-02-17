@@ -6,6 +6,8 @@ export type DatabaseMode = 'memory' | 'postgres-psql' | 'postgres-docker';
 
 export type ModuleSystem = 'commonjs' | 'esm';
 
+export type JsDevWatcher = 'node-watch' | 'nodemon';
+
 export interface CliFlags {
   yes: boolean;
   dryRun: boolean;
@@ -34,6 +36,7 @@ export interface UserSelections {
   projectName: string;
   language: Language;
   moduleSystem: ModuleSystem;
+  jsDevWatcher: JsDevWatcher;
   architecture: Architecture;
   databaseMode: DatabaseMode;
   educational: boolean;
@@ -46,6 +49,7 @@ export interface TemplateConfig {
   projectName: string;
   language: Language;
   moduleSystem: ModuleSystem;
+  jsDevWatcher: JsDevWatcher;
   architecture: Architecture;
   educational: boolean;
   databaseMode: DatabaseMode;
