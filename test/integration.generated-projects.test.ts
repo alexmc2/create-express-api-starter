@@ -28,7 +28,7 @@ describe.sequential('generated project integration', () => {
           targetDir
         });
 
-        await execa('npm', ['install', '--no-audit', '--no-fund'], { cwd: targetDir });
+        await execa('npm', ['install', '--include=dev', '--no-audit', '--no-fund'], { cwd: targetDir });
         await execa('npm', ['run', 'lint'], { cwd: targetDir });
         await execa('npm', ['test'], { cwd: targetDir });
       } finally {
@@ -58,7 +58,7 @@ describe.sequential('generated project integration', () => {
           targetDir
         });
 
-        await execa('npm', ['install', '--no-audit', '--no-fund'], { cwd: targetDir });
+        await execa('npm', ['install', '--include=dev', '--no-audit', '--no-fund'], { cwd: targetDir });
         await execa('npm', ['run', 'lint'], { cwd: targetDir });
         await execa('npm', ['run', 'build'], { cwd: targetDir });
         await execa('npm', ['test'], { cwd: targetDir });
@@ -89,7 +89,7 @@ describe.sequential('generated project integration', () => {
           targetDir
         });
 
-        await execa('npm', ['install', '--no-audit', '--no-fund'], { cwd: targetDir });
+        await execa('npm', ['install', '--include=dev', '--no-audit', '--no-fund'], { cwd: targetDir });
         await execa('npm', ['run', 'lint'], { cwd: targetDir });
         await execa('npm', ['test'], { cwd: targetDir });
       } finally {

@@ -2,9 +2,28 @@
   "name": "@alexmc2/create-express-api-starter",
   "version": "0.1.0",
   "description": "Interactive CLI to scaffold API-first Express backend projects",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexmc2/create-express-api-starter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexmc2/create-express-api-starter/issues"
+  },
+  "homepage": "https://github.com/alexmc2/create-express-api-starter#readme",
+  "keywords": [
+    "express",
+    "api",
+    "scaffold",
+    "starter",
+    "cli",
+    "generator",
+    "typescript",
+    "javascript"
+  ],
   "bin": {
-    "create-express-api-starter": "./dist/cli.js"
+    "create-express-api-starter": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -19,7 +38,13 @@
     "dev": "tsx src/cli/index.ts",
     "build": "tsup",
     "test": "vitest run",
-    "pack": "npm pack"
+    "test:unit": "vitest run --exclude test/integration.generated-projects.test.ts",
+    "pack": "npm pack",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run test:unit && npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@clack/prompts": "^0.10.1",
