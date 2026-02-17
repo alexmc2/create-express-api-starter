@@ -125,6 +125,9 @@ describe('generator', () => {
       expect(
         await fs.pathExists(path.join(targetDir, 'src/utils/getPort.ts')),
       ).toBe(true);
+      expect(await fs.pathExists(path.join(targetDir, '.eslintrc.cjs'))).toBe(
+        true,
+      );
     } finally {
       await fs.remove(root);
     }
