@@ -46,12 +46,17 @@ describe('generator', () => {
         '__tests__/app.test.js',
         '.env.example',
         '.gitignore',
+        '.eslintrc.cjs',
       ];
 
       for (const file of expectedFiles) {
         const exists = await fs.pathExists(path.join(targetDir, file));
         expect(exists).toBe(true);
       }
+
+      const packageJson = await fs.readJson(path.join(targetDir, 'package.json'));
+      expect(packageJson.scripts.lint).toBe('eslint .');
+      expect(packageJson.devDependencies.eslint).toBeDefined();
     } finally {
       await fs.remove(root);
     }
@@ -80,11 +85,17 @@ describe('generator', () => {
 
       expect(packageJson.scripts.dev).toBe('tsx watch src/server.ts');
       expect(packageJson.scripts.build).toBe('tsc');
+      expect(packageJson.scripts.lint).toBe('eslint . --ext .ts');
       expect(packageJson.scripts['db:setup']).toBe('node scripts/dbSetup.js');
       expect(packageJson.scripts['db:seed']).toBe('node scripts/dbSeed.js');
       expect(packageJson.dependencies.pg).toBeDefined();
       expect(packageJson.devDependencies['@swc/jest']).toBeDefined();
       expect(packageJson.devDependencies['@swc/core']).toBeDefined();
+      expect(packageJson.devDependencies.eslint).toBeDefined();
+      expect(
+        packageJson.devDependencies['@typescript-eslint/eslint-plugin'],
+      ).toBeDefined();
+      expect(packageJson.devDependencies['@typescript-eslint/parser']).toBeDefined();
 
       const readme = await fs.readFile(
         path.join(targetDir, 'README.md'),
@@ -116,6 +127,9 @@ describe('generator', () => {
       expect(
         await fs.pathExists(path.join(targetDir, 'src/utils/getPort.ts')),
       ).toBe(true);
+      expect(await fs.pathExists(path.join(targetDir, '.eslintrc.cjs'))).toBe(
+        true,
+      );
     } finally {
       await fs.remove(root);
     }
@@ -145,6 +159,8 @@ describe('generator', () => {
       expect(packageJson.scripts.test).toBe(
         'node --experimental-vm-modules ./node_modules/jest/bin/jest.js',
       );
+      expect(packageJson.scripts.lint).toBe('eslint .');
+      expect(packageJson.devDependencies.eslint).toBeDefined();
 
       const appFile = await fs.readFile(path.join(targetDir, 'src/app.js'), 'utf8');
       expect(appFile).toContain("import express from 'express';");
