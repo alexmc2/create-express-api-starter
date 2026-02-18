@@ -235,6 +235,8 @@ For developers who already have PostgreSQL installed locally. The generated proj
 - A project-specific database name derived from your project name (e.g. `my-api` → `my_api_dev`)
 - `DATABASE_URL` pre-configured with your OS username
 
+> Note: Local dev defaults are for convenience only; update DB credentials in `.env` before deployment.
+
 **Requires:** PostgreSQL installed and running locally.
 
 ```bash
