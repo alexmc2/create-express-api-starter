@@ -2,5 +2,6 @@
   "files.associations": {
     "*.yaml.ejs": "yaml",
     "*.sql.ejs": "sql"
-  }
+  },
+  "markdown.extension.toc.levels": "2..2"
 }
