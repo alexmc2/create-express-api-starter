@@ -16,6 +16,7 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - Refactored template resolution so TypeScript scaffolds are composed from `templates/ts/shared` plus architecture-specific overlays, removing duplicated TS template trees.
 - Updated root CLI dependencies and generated template dependency versions across JavaScript and TypeScript scaffolds.
 - Made the CLI `Postgres Setup` terminal card OS-aware with Linux, macOS, and Windows-specific guidance.
+- Centralized database name normalization in a shared core helper and reused it across generator/template data and CLI output.
 
 ## [0.1.4] - 2026-02-18
 ### Changed

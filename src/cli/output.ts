@@ -8,6 +8,7 @@ import {
   languageLabel,
   moduleSystemLabel,
 } from '../core/labels.js';
+import { toDatabaseName } from '../core/naming.js';
 import type { GenerationPlan, UserSelections } from '../core/types.js';
 import {
   formatCommandLines,
@@ -45,17 +46,6 @@ function buildNextStepCommands(selection: UserSelections): string[] {
   commands.push('npm test');
 
   return commands;
-}
-
-function toDatabaseName(projectName: string): string {
-  const cleaned = projectName
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+/, '')
-    .replace(/_+$/, '');
-
-  return (cleaned || 'express_api') + '_dev';
 }
 
 function buildPsqlSetupLines(
