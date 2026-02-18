@@ -1,16 +1,85 @@
 # @alexmc2/create-express-api-starter
 
-An interactive CLI that scaffolds beginner-friendly Express API projects. Answer a few questions and get a fully working, tested API with sensible defaults - ready to run in minutes.
+[![npm version](https://badge.fury.io/js/%40alexmc2%2Fcreate-express-api-starter.svg)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
+
+A beginner-friendly npm CLI that scaffolds Express APIs with best-practice structure and optional educational comments.
+
+- JavaScript or TypeScript
+- Simple or MVC architecture
+- In-memory or PostgreSQL (local `psql` or Docker)
+- npm workflow (`npx` for one-off usage)
+
+<br />
 
 ![create-express-api-starter CLI output](https://res.cloudinary.com/drbz4rq7y/image/upload/v1771349250/projects/readme_hn5fvu.png)
 
+<br />
+
 > Works on Linux, macOS, and Windows. The screenshot above shows Linux-specific Postgres setup, but the generated README includes instructions for all platforms.
+
+## Table of contents
+
+- [Installation](#installation)
+- [Usage examples](#usage-examples)
+- [Why this exists](#why-this-exists)
+- [How it works](#how-it-works)
+- [Options](#options)
+- [What gets generated](#what-gets-generated)
+- [Database modes](#database-modes)
+- [Educational comments](#educational-comments)
+- [Design decisions](#design-decisions)
+- [Requirements](#requirements)
+- [Built with](#built-with)
+- [Contributing](#contributing)
+- [Licence](#licence)
+
+## Installation
+
+### No install (recommended)
 
 ```bash
 npx @alexmc2/create-express-api-starter my-api
 ```
 
----
+### Global install (optional)
+
+```bash
+npm install -g @alexmc2/create-express-api-starter
+```
+
+> The npm package page may show `npm i @alexmc2/create-express-api-starter`. That command installs the package into your current project. For one-off scaffolding, use `npx` above.
+
+## Usage examples
+
+### Interactive flow
+
+```bash
+npx @alexmc2/create-express-api-starter my-api
+```
+
+### Accept defaults (non-interactive)
+
+```bash
+npx @alexmc2/create-express-api-starter my-api --yes
+```
+
+### Dry run
+
+```bash
+npx @alexmc2/create-express-api-starter my-api --dry-run
+```
+
+Then:
+
+```bash
+cd my-api
+cp .env.example .env
+npm run dev    # Start the dev server
+npm test       # Run the test suite
+npm run lint   # Run ESLint
+```
+
+Your API is live at `http://localhost:3000`. Hit `http://localhost:3000/health` to confirm.
 
 ## Why this exists
 
@@ -26,31 +95,6 @@ This is a two-part system:
 2. **The generated project** - a standalone Express API in its own folder with its own dependencies, scripts, and tests. The CLI exits after creating it.
 
 When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the CLI, generates the project into `my-api/`, optionally runs `npm install`, and exits. The generated project has no dependency on this tool.
-
-## Quick start
-
-```bash
-# Interactive - answer a few questions
-npx @alexmc2/create-express-api-starter my-api
-
-# Skip prompts and accept all defaults
-npx @alexmc2/create-express-api-starter my-api --yes
-
-# Preview what would be generated without writing anything
-npx @alexmc2/create-express-api-starter my-api --dry-run
-```
-
-Then:
-
-```bash
-cd my-api
-cp .env.example .env
-npm run dev    # Start the dev server
-npm test       # Run the test suite
-npm run lint   # Run ESLint
-```
-
-Your API is live at `http://localhost:3000`. Hit `http://localhost:3000/health` to confirm.
 
 ## Options
 

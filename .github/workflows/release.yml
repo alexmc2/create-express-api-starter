@@ -1,6 +1,9 @@
 name: Release
 
 on:
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -13,7 +16,7 @@ concurrency:
 
 jobs:
   publish:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org
           cache: npm
 
@@ -33,16 +36,14 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Validate npm token secret
+      - name: Verify tag commit is on main
+        if: github.event_name == 'push'
         run: |
-          if [ -z "${NODE_AUTH_TOKEN}" ]; then
-            echo "Missing required repository secret: NPM_TOKEN"
+          git fetch origin main --depth=1
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" "origin/main"; then
+            echo "Tag commit is not contained in origin/main. Refusing publish."
             exit 1
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets['NPM_TOKEN'] }}
 
       - name: Publish to npm
-        run: npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets['NPM_TOKEN'] }}
+        run: npm publish
