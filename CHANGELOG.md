@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-02-18
+### Changed
+- Added a Postgres safety note in README clarifying local default DB credentials should be updated in `.env` before deployment.
+
 ## [0.1.1] - 2026-02-18
 ### Added
 - Publish-readiness improvements for CI, release workflow, and npm metadata.
