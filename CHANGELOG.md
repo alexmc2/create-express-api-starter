@@ -8,6 +8,10 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 ## [Unreleased]
 ### Added
 - Publish-readiness improvements for CI, release workflow, and npm metadata.
+- npm release workflow now supports Trusted Publishing (OIDC) and tag-triggered publish automation.
+
+### Changed
+- README restructuring with explicit installation guidance prioritising `npx` over local `npm i`.
 
 ## [0.1.0] - 2026-02-17
 ### Added
