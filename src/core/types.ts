@@ -56,6 +56,7 @@ export interface TemplateConfig {
 }
 
 export interface PlannedFile {
+  templateSourcePath: string;
   templateRelativePath: string;
   outputRelativePath: string;
   isTemplate: boolean;

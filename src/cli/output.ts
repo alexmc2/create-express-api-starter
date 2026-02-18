@@ -8,6 +8,7 @@ import {
   languageLabel,
   moduleSystemLabel,
 } from '../core/labels.js';
+import { toDatabaseName } from '../core/naming.js';
 import type { GenerationPlan, UserSelections } from '../core/types.js';
 import {
   formatCommandLines,
@@ -45,6 +46,46 @@ function buildNextStepCommands(selection: UserSelections): string[] {
   commands.push('npm test');
 
   return commands;
+}
+
+function buildPsqlSetupLines(
+  selection: UserSelections,
+  platform: NodeJS.Platform,
+): string[] {
+  const databaseName = toDatabaseName(selection.projectName);
+
+  if (platform === 'win32') {
+    return [
+      pc.yellow('Windows first-time setup (run once if needed):'),
+      pc.dim('# Edit .env and use the role/password from the PostgreSQL installer'),
+      ...formatCommandLines([
+        `DATABASE_URL=postgres://postgres:<your-password>@localhost:5432/${databaseName}`,
+      ]),
+      pc.dim('# Then run the db scripts below:'),
+      ...formatCommandLines(['npm run db:create']),
+    ];
+  }
+
+  if (platform === 'darwin') {
+    return [
+      pc.yellow('macOS first-time setup (run once if needed):'),
+      pc.dim('# Homebrew installs often already create a role for your OS user'),
+      pc.dim('# Run these only if you get a role/auth error'),
+      ...formatCommandLines([
+        'createuser --createdb "$USER"',
+        `psql -d postgres -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
+      ]),
+    ];
+  }
+
+  return [
+    pc.yellow('Linux first-time setup (run once if needed):'),
+    pc.dim('# Create a Postgres role matching your OS user'),
+    ...formatCommandLines([
+      'sudo -u postgres createuser --createdb "$USER"',
+      `sudo -u postgres psql -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
+    ]),
+  ];
 }
 
 export function printDryRunPlan(
@@ -115,7 +156,10 @@ export function printDryRunPlan(
   printCard(`Dry Run: Files (${plan.files.length})`, fileLines);
 }
 
-export function printNextSteps(selection: UserSelections): void {
+export function printNextSteps(
+  selection: UserSelections,
+  platform: NodeJS.Platform = process.platform,
+): void {
   const stackParts = [
     selection.language === 'js'
       ? `${languageLabel(selection.language)} (${moduleSystemLabel(selection.moduleSystem)})`
@@ -160,14 +204,7 @@ export function printNextSteps(selection: UserSelections): void {
   printCard('Next Steps', formatCommandLines(nextStepCommands));
 
   if (selection.databaseMode === 'postgres-psql') {
-    const setupLines = [
-      pc.yellow('First-time setup (run once if needed):'),
-      pc.dim('# Create a Postgres role matching your OS user'),
-      ...formatCommandLines([
-        'sudo -u postgres createuser --createdb "$USER"',
-        `sudo -u postgres psql -c "ALTER USER \\"$USER\\" WITH PASSWORD 'postgres';"`,
-      ]),
-    ];
+    const setupLines = buildPsqlSetupLines(selection, platform);
 
     console.log('');
     printCard('Postgres Setup', setupLines);

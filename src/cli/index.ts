@@ -1,6 +1,7 @@
 import pc from 'picocolors';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { parseArgs } from './args.js';
@@ -77,6 +78,17 @@ async function runCli(argv: string[]): Promise<void> {
     config: templateConfig,
     targetDir
   });
+
+  const packageJsonPath = path.join(targetDir, 'package.json');
+  if (!fs.existsSync(packageJsonPath)) {
+    throw new Error(
+      [
+        'Project generation did not produce package.json.',
+        'This can happen if the installed CLI/templates are out of sync.',
+        'Reinstall the latest package version and try again.'
+      ].join(' ')
+    );
+  }
 
   logger.success(`Project files generated at ${targetDir}.`);
 
