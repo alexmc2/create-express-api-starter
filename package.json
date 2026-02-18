@@ -1,6 +1,6 @@
 {
   "name": "@alexmc2/create-express-api-starter",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Interactive CLI to scaffold API-first Express backend projects",
   "license": "MIT",
   "type": "module",
