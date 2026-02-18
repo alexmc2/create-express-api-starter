@@ -1,6 +1,6 @@
 # @alexmc2/create-express-api-starter
 
-[![npm version](https://badge.fury.io/js/%40alexmc2%2Fcreate-express-api-starter.svg)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
+[![npm version](https://badge.fury.io/js/%40alexmc2%2Fcreate-express-api-starter.svg?cb=0.1.3)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
 
 A beginner-friendly npm CLI that scaffolds Express APIs with best-practice structure and optional educational comments.
 

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-02-18
+### Changed
+- Updated the README npm badge URL with a cache-busting query parameter so npm/GitHub badge rendering refreshes reliably after releases.
+
 ## [0.1.2] - 2026-02-18
 ### Changed
 - Added a Postgres safety note in README clarifying local default DB credentials should be updated in `.env` before deployment.
