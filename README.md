@@ -1,6 +1,6 @@
 # @alexmc2/create-express-api-starter
 
-[![npm version](https://badge.fury.io/js/%40alexmc2%2Fcreate-express-api-starter.svg?cb=0.1.3)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
+[![npm version](https://badge.fury.io/js/%40alexmc2%2Fcreate-express-api-starter.svg?cb=0.1.4)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
 
 A beginner-friendly npm CLI that scaffolds Express APIs with best-practice structure and optional educational comments.
 
@@ -19,13 +19,29 @@ A beginner-friendly npm CLI that scaffolds Express APIs with best-practice struc
 
 ## Table of contents
 
+- [@alexmc2/create-express-api-starter](#alexmc2create-express-api-starter)
+- [Table of contents](#table-of-contents)
 - [Installation](#installation)
+- [No install (recommended)](#no-install-recommended)
+- [Global install (optional)](#global-install-optional)
 - [Usage examples](#usage-examples)
+- [Interactive flow](#interactive-flow)
+- [Accept defaults (non-interactive)](#accept-defaults-non-interactive)
+- [Dry run](#dry-run)
 - [Why this exists](#why-this-exists)
 - [How it works](#how-it-works)
 - [Options](#options)
+- [CLI flags](#cli-flags)
 - [What gets generated](#what-gets-generated)
+- [Project structure (Simple architecture, JavaScript)](#project-structure-simple-architecture-javascript)
+- [Middleware](#middleware)
+- [Error handling](#error-handling)
+- [Scripts](#scripts)
+- [Tests](#tests)
 - [Database modes](#database-modes)
+- [In-memory (default)](#in-memory-default)
+- [Postgres (psql)](#postgres-psql)
+- [Postgres (Docker)](#postgres-docker)
 - [Educational comments](#educational-comments)
 - [Design decisions](#design-decisions)
 - [Requirements](#requirements)
