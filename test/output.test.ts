@@ -20,6 +20,7 @@ const baseSelection: UserSelections = {
 
 function captureNextStepsLogs(
   override: Partial<UserSelections> = {},
+  platform: NodeJS.Platform = process.platform,
 ): string[] {
   const lines: string[] = [];
   const spy = vi.spyOn(console, 'log').mockImplementation((...args: unknown[]) => {
@@ -29,7 +30,7 @@ function captureNextStepsLogs(
   printNextSteps({
     ...baseSelection,
     ...override,
-  });
+  }, platform);
 
   spy.mockRestore();
   return lines;
@@ -50,7 +51,7 @@ describe('printNextSteps', () => {
   });
 
   it('prints psql setup guidance and database commands once', () => {
-    const lines = captureNextStepsLogs({ databaseMode: 'postgres-psql' });
+    const lines = captureNextStepsLogs({ databaseMode: 'postgres-psql' }, 'linux');
 
     const envCopyLines = lines.filter((line) =>
       line.includes('cp .env.example .env'),
@@ -60,6 +61,9 @@ describe('printNextSteps', () => {
     expect(lines.some((line) => line.includes('npm run db:create'))).toBe(true);
     expect(lines.some((line) => line.includes('npm run db:setup'))).toBe(true);
     expect(lines.some((line) => line.includes('npm run db:seed'))).toBe(true);
+    expect(lines.some((line) => line.includes('sudo -u postgres createuser'))).toBe(
+      true,
+    );
   });
 
   it('prints docker database commands', () => {
@@ -71,5 +75,27 @@ describe('printNextSteps', () => {
     expect(lines.some((line) => line.includes('npm run db:up'))).toBe(true);
     expect(lines.some((line) => line.includes('npm run db:setup'))).toBe(true);
     expect(lines.some((line) => line.includes('npm run db:seed'))).toBe(true);
+  });
+
+  it('prints Windows-specific Postgres setup guidance without sudo', () => {
+    const lines = captureNextStepsLogs(
+      {
+        databaseMode: 'postgres-psql',
+        projectName: 'my-api-test-2',
+      },
+      'win32',
+    );
+
+    expect(lines.some((line) => line.includes('Windows first-time setup'))).toBe(
+      true,
+    );
+    expect(
+      lines.some((line) =>
+        line.includes(
+          'DATABASE_URL=postgres://postgres:<your-password>@localhost:5432/my_api_test_2_dev',
+        ),
+      ),
+    ).toBe(true);
+    expect(lines.some((line) => line.includes('sudo -u postgres'))).toBe(false);
   });
 });

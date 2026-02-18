@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { execa } from 'execa';
 import fs from 'fs-extra';
-import { describe, expect, it } from 'vitest';
+import { describe, it } from 'vitest';
 
 import { generateProject } from '../src/generator/index.js';
 

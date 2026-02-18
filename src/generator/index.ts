@@ -37,9 +37,17 @@ function stripEjsSuffix(relativePath: string): string {
     : relativePath;
 }
 
-function resolveTemplateRoot(config: TemplateConfig): string {
+function resolveTemplateRoots(config: TemplateConfig): string[] {
   const templatesDir = resolveTemplatesDir();
-  return path.join(templatesDir, config.language, config.architecture);
+
+  if (config.language === 'ts') {
+    return [
+      path.join(templatesDir, 'ts', 'shared'),
+      path.join(templatesDir, 'ts', config.architecture),
+    ];
+  }
+
+  return [path.join(templatesDir, config.language, config.architecture)];
 }
 
 async function listFilesRecursive(
@@ -95,8 +103,12 @@ function shouldIncludeTemplate(
   return true;
 }
 
-function toPlannedFile(relativeTemplatePath: string): PlannedFile {
+function toPlannedFile(
+  sourcePath: string,
+  relativeTemplatePath: string,
+): PlannedFile {
   return {
+    templateSourcePath: sourcePath,
     templateRelativePath: relativeTemplatePath,
     outputRelativePath: stripEjsSuffix(relativeTemplatePath),
     isTemplate: isEjsTemplate(relativeTemplatePath),
@@ -180,19 +192,32 @@ export async function planProject(
   config: TemplateConfig,
   targetDir: string,
 ): Promise<GenerationPlan> {
-  const templateRoot = resolveTemplateRoot(config);
-  const templateRootExists = await fs.pathExists(templateRoot);
+  const templateRoots = resolveTemplateRoots(config);
 
-  if (!templateRootExists) {
-    throw new Error(`Template root not found: ${templateRoot}`);
+  for (const templateRoot of templateRoots) {
+    const templateRootExists = await fs.pathExists(templateRoot);
+
+    if (!templateRootExists) {
+      throw new Error(`Template root not found: ${templateRoot}`);
+    }
   }
 
-  const allFiles = await listFilesRecursive(templateRoot);
+  const templateFiles = new Map<string, string>();
 
-  const files = allFiles
-    .map(toPosixPath)
-    .filter((relativePath) => shouldIncludeTemplate(relativePath, config))
-    .map(toPlannedFile);
+  for (const templateRoot of templateRoots) {
+    const allFiles = await listFilesRecursive(templateRoot);
+
+    for (const file of allFiles) {
+      const relativePath = toPosixPath(file);
+      const sourcePath = path.join(templateRoot, fromPosixPath(relativePath));
+      templateFiles.set(relativePath, sourcePath);
+    }
+  }
+
+  const files = Array.from(templateFiles.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .filter(([relativePath]) => shouldIncludeTemplate(relativePath, config))
+    .map(([relativePath, sourcePath]) => toPlannedFile(sourcePath, relativePath));
 
   return {
     targetDir,
@@ -209,7 +234,6 @@ export async function generateProject({
   targetDir,
   dryRun = false,
 }: GenerateProjectInput): Promise<GenerationPlan> {
-  const templateRoot = resolveTemplateRoot(config);
   const plan = await planProject(config, targetDir);
 
   if (dryRun) {
@@ -221,10 +245,6 @@ export async function generateProject({
   const data = templateData(config);
 
   for (const file of plan.files) {
-    const sourcePath = path.join(
-      templateRoot,
-      fromPosixPath(file.templateRelativePath),
-    );
     const destinationPath = path.join(
       targetDir,
       fromPosixPath(file.outputRelativePath),
@@ -233,13 +253,13 @@ export async function generateProject({
     await fs.ensureDir(path.dirname(destinationPath));
 
     if (file.isTemplate) {
-      const template = await fs.readFile(sourcePath, 'utf8');
+      const template = await fs.readFile(file.templateSourcePath, 'utf8');
       const rendered = ejs.render(template, data);
       await fs.writeFile(destinationPath, rendered, 'utf8');
       continue;
     }
 
-    await fs.copy(sourcePath, destinationPath);
+    await fs.copy(file.templateSourcePath, destinationPath);
   }
 
   return plan;

@@ -1,13 +1,13 @@
 # @alexmc2/create-express-api-starter
 
-[![npm version](https://badge.fury.io/js/%40alexmc2%2Fcreate-express-api-starter.svg?cb=0.1.4)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
+[![npm version](https://img.shields.io/npm/v/%40alexmc2%2Fcreate-express-api-starter?label=npm%20package)](https://www.npmjs.com/package/@alexmc2/create-express-api-starter)
 
 A beginner-friendly npm CLI that scaffolds Express APIs with best-practice structure and optional educational comments.
 
 - JavaScript or TypeScript
 - Simple or MVC architecture
 - In-memory or PostgreSQL (local `psql` or Docker)
-- npm workflow (`npx` for one-off usage)
+- npm workflow (`npm create`, `npm init`, or `npx`)
 
 <br />
 
@@ -22,7 +22,9 @@ A beginner-friendly npm CLI that scaffolds Express APIs with best-practice struc
 - [@alexmc2/create-express-api-starter](#alexmc2create-express-api-starter)
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
-- [No install (recommended)](#no-install-recommended)
+- [npm create (recommended)](#npm-create-recommended)
+- [npm init](#npm-init)
+- [npx (equivalent)](#npx-equivalent)
 - [Global install (optional)](#global-install-optional)
 - [Usage examples](#usage-examples)
 - [Interactive flow](#interactive-flow)
@@ -51,7 +53,19 @@ A beginner-friendly npm CLI that scaffolds Express APIs with best-practice struc
 
 ## Installation
 
-### No install (recommended)
+### npm create (recommended)
+
+```bash
+npm create @alexmc2/express-api-starter@latest my-api
+```
+
+### npm init
+
+```bash
+npm init @alexmc2/express-api-starter my-api
+```
+
+### npx (equivalent)
 
 ```bash
 npx @alexmc2/create-express-api-starter my-api
@@ -63,26 +77,26 @@ npx @alexmc2/create-express-api-starter my-api
 npm install -g @alexmc2/create-express-api-starter
 ```
 
-> The npm package page may show `npm i @alexmc2/create-express-api-starter`. That command installs the package into your current project. For one-off scaffolding, use `npx` above.
+> The npm package page may show `npm i @alexmc2/create-express-api-starter`. That command installs the package into your current project. For one-off scaffolding, use `npm create`, `npm init`, or `npx`.
 
 ## Usage examples
 
 ### Interactive flow
 
 ```bash
-npx @alexmc2/create-express-api-starter my-api
+npm create @alexmc2/express-api-starter@latest my-api
 ```
 
 ### Accept defaults (non-interactive)
 
 ```bash
-npx @alexmc2/create-express-api-starter my-api --yes
+npm create @alexmc2/express-api-starter@latest my-api -- --yes
 ```
 
 ### Dry run
 
 ```bash
-npx @alexmc2/create-express-api-starter my-api --dry-run
+npm create @alexmc2/express-api-starter@latest my-api -- --dry-run
 ```
 
 Then:
@@ -110,7 +124,7 @@ This is a two-part system:
 1. **The CLI** (this package) - asks what you want, then generates files from templates.
 2. **The generated project** - a standalone Express API in its own folder with its own dependencies, scripts, and tests. The CLI exits after creating it.
 
-When you run `npx @alexmc2/create-express-api-starter my-api`, npm downloads the CLI, generates the project into `my-api/`, optionally runs `npm install`, and exits. The generated project has no dependency on this tool.
+When you run `npm create @alexmc2/express-api-starter@latest my-api` (or the equivalent `npm init`/`npx` command), npm downloads the CLI, generates the project into `my-api/`, optionally runs `npm install`, and exits. The generated project has no dependency on this tool.
 
 ## Options
 
