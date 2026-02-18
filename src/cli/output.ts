@@ -161,7 +161,7 @@ export function printNextSteps(selection: UserSelections): void {
 
   if (selection.databaseMode === 'postgres-psql') {
     const setupLines = [
-      pc.yellow('Linux first-time setup (run once if needed):'),
+      pc.yellow('First-time setup (run once if needed):'),
       pc.dim('# Create a Postgres role matching your OS user'),
       ...formatCommandLines([
         'sudo -u postgres createuser --createdb "$USER"',
