@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-02-18
+### Changed
+- Refined README copy and structure for clearer, more natural release documentation and usage guidance.
+- Corrected the main README dependency summary to match generated projects (Express 5).
+- Updated generated TypeScript README folder trees to include `tsconfig.eslint.json` so docs match scaffolded output.
+
 ## [0.1.5] - 2026-02-18
 ### Added
 - Added root ESLint configuration with `@typescript-eslint` and `@typescript-eslint/await-thenable` checks.
