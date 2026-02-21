@@ -14,6 +14,7 @@ The CLI offers multiple configuration options to suit different preferences and 
 - Simple or MVC architecture
 - In-memory or PostgreSQL (local `psql` or Docker)
 - npm workflow (`npm create`, `npm init`, or `npx`)
+- Dependency installs with `npm` or `yarn`
 
 <br />
 
@@ -96,6 +97,12 @@ npm test       # Run the test suite
 npm run lint   # Run ESLint
 ```
 
+To use Yarn for dependency installation and command examples shown by the CLI:
+
+```bash
+npm create @alexmc2/express-api-starter@latest my-api -- --package-manager=yarn
+```
+
 Your API is live at `http://localhost:3000`. Go to `http://localhost:3000/health` to confirm.
 
 ## How it works
@@ -117,6 +124,7 @@ The CLI walks you through these choices interactively. Use `--yes` to skip promp
 | **Database**                | In-memory, Postgres (psql), Postgres (Docker) | In-memory      |
 | **Educational comments**    | On, Off                                       | On             |
 | **Install dependencies**    | Yes, No                                       | Yes            |
+| **Package manager**         | npm, yarn                                     | npm            |
 | **Initialise git repo**     | Yes, No                                       | Yes            |
 
 ### CLI flags
@@ -125,9 +133,12 @@ The CLI walks you through these choices interactively. Use `--yes` to skip promp
 | -------------- | ----------------------------------------------------------- |
 | `--yes`        | Accept all defaults, skip prompts                           |
 | `--dry-run`    | Show the generation plan without writing files              |
-| `--no-install` | Skip `npm install` after generation                         |
+| `--no-install` | Skip dependency installation after generation               |
 | `--no-git`     | Skip `git init` after generation                            |
-| `--verbose`    | Show full `npm install` output instead of the quiet default |
+| `--verbose`    | Show full dependency install output instead of quiet mode   |
+| `--package-manager=<name>` | Choose dependency installer: `npm` or `yarn`             |
+| `--pm <name>`  | Alias for `--package-manager`                               |
+| `--yarn`       | Shortcut for `--package-manager=yarn`                       |
 
 ## What gets generated
 

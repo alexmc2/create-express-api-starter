@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7] - 2026-02-21
+### Added
+- Added package manager selection for dependency installation (`npm` or `yarn`) in interactive prompts and non-interactive runs.
+- Added CLI flags for package manager control: `--package-manager`, `--pm`, and `--yarn`.
+- Added parser and output test coverage for new package manager behavior and Yarn command rendering.
+
+### Changed
+- Updated dependency installation to execute the selected package manager command and to validate the selected executable only when installs are enabled.
+- Updated next-step output to print package-manager-specific commands (`npm` vs `yarn`).
+- Updated README options/flags documentation with package manager selection and Yarn usage examples.
+
 ## [0.1.6] - 2026-02-18
 ### Changed
 - Refined README copy and structure for clearer, more natural release documentation and usage guidance.

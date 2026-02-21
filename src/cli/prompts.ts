@@ -36,6 +36,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
       databaseMode: DEFAULT_SELECTIONS.databaseMode,
       educational: DEFAULT_SELECTIONS.educational,
       installDeps: parsedArgs.flags.install,
+      packageManager: parsedArgs.flags.packageManager,
       initGit: parsedArgs.flags.git,
       dryRun: parsedArgs.flags.dryRun
     };
@@ -176,6 +177,25 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
         })
       );
 
+  const packageManager = parsedArgs.provided.packageManager
+    ? parsedArgs.flags.packageManager
+    : (unwrapPrompt(
+        await select({
+          message: 'Package manager',
+          initialValue: DEFAULT_SELECTIONS.packageManager,
+          options: [
+            {
+              value: 'npm',
+              label: 'npm'
+            },
+            {
+              value: 'yarn',
+              label: 'yarn'
+            }
+          ]
+        })
+      ) as UserSelections['packageManager']);
+
   const initGit = parsedArgs.provided.git
     ? parsedArgs.flags.git
     : unwrapPrompt(
@@ -196,6 +216,7 @@ export async function collectSelections(parsedArgs: ParsedArgs): Promise<UserSel
     databaseMode,
     educational,
     installDeps,
+    packageManager,
     initGit,
     dryRun: parsedArgs.flags.dryRun
   };
