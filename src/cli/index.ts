@@ -7,9 +7,15 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from './args.js';
 import { printDryRunPlan, printNextSteps } from './output.js';
 import { collectSelections, PromptCancelledError } from './prompts.js';
+import type { PackageManager } from '../core/types.js';
 import { validateProjectName } from '../core/validation.js';
 import { generateProject, planProject } from '../generator/index.js';
-import { commandExists, initGitRepo, installDependencies } from '../utils/exec.js';
+import {
+  commandExists,
+  formatInstallCommand,
+  initGitRepo,
+  installDependencies,
+} from '../utils/exec.js';
 import { assertSafeTargetDir } from '../utils/files.js';
 import { logger } from '../utils/logger.js';
 import { resolveTargetDir } from '../utils/paths.js';
@@ -22,6 +28,19 @@ async function ensurePsqlAvailable(): Promise<void> {
       [
         'Postgres (psql) mode requires the `psql` client tool, but it was not found.',
         'Install Postgres client tools and make sure `psql --version` works, or rerun and choose Postgres (Docker).'
+      ].join(' ')
+    );
+  }
+}
+
+async function ensurePackageManagerAvailable(packageManager: PackageManager): Promise<void> {
+  const hasPackageManager = await commandExists(packageManager, ['--version']);
+
+  if (!hasPackageManager) {
+    throw new Error(
+      [
+        `Package manager "${packageManager}" was selected, but it was not found.`,
+        `Install ${packageManager} or rerun with --package-manager=npm.`
       ].join(' ')
     );
   }
@@ -93,11 +112,14 @@ async function runCli(argv: string[]): Promise<void> {
   logger.success(`Project files generated at ${targetDir}.`);
 
   if (selections.installDeps) {
-    const installCommand = parsedArgs.flags.verbose
-      ? 'npm install --no-audit --no-fund'
-      : 'npm install --no-audit --no-fund --loglevel=error';
+    await ensurePackageManagerAvailable(selections.packageManager);
+
+    const installCommand = formatInstallCommand(
+      selections.packageManager,
+      parsedArgs.flags.verbose
+    );
     logger.info(`Installing dependencies (${installCommand})...`);
-    await installDependencies(targetDir, parsedArgs.flags.verbose);
+    await installDependencies(targetDir, selections.packageManager, parsedArgs.flags.verbose);
     logger.success('Dependencies installed.');
   } else {
     logger.info('Skipped dependency installation.');

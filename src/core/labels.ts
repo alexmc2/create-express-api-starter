@@ -4,6 +4,7 @@ import type {
   JsDevWatcher,
   Language,
   ModuleSystem,
+  PackageManager,
 } from './types.js';
 
 export function languageLabel(language: Language): string {
@@ -32,4 +33,8 @@ export function databaseLabel(databaseMode: DatabaseMode): string {
   }
 
   return 'In-memory';
+}
+
+export function packageManagerLabel(packageManager: PackageManager): string {
+  return packageManager === 'yarn' ? 'Yarn' : 'npm';
 }

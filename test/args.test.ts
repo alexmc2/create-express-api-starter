@@ -57,4 +57,37 @@ describe('parseArgs', () => {
     expect(parsed.flags.verbose).toBe(true);
     expect(parsed.unknownFlags).toEqual([]);
   });
+
+  it('supports selecting package manager via --package-manager/--pm', () => {
+    const parsedWithEquals = parseArgs(['my-api', '--package-manager=yarn']);
+    const parsedWithValueToken = parseArgs(['my-api', '--pm', 'yarn']);
+
+    expect(parsedWithEquals.flags.packageManager).toBe('yarn');
+    expect(parsedWithEquals.provided.packageManager).toBe(true);
+    expect(parsedWithValueToken.flags.packageManager).toBe('yarn');
+    expect(parsedWithValueToken.provided.packageManager).toBe(true);
+  });
+
+  it('supports --yarn shortcut semantics explicitly', () => {
+    const parsed = parseArgs(['my-api', '--yarn']);
+    const parsedFalse = parseArgs(['my-api', '--yarn=false']);
+
+    expect(parsed.flags.packageManager).toBe('yarn');
+    expect(parsed.provided.packageManager).toBe(true);
+    expect(parsedFalse.flags.packageManager).toBe('npm');
+  });
+
+  it('treats invalid package manager values as unknown flags', () => {
+    const parsed = parseArgs(['my-api', '--package-manager=pnpm', '--pm']);
+
+    expect(parsed.flags.packageManager).toBe('npm');
+    expect(parsed.unknownFlags).toEqual(['--package-manager=pnpm', '--pm']);
+  });
+
+  it('does not consume positional tokens for invalid --pm values', () => {
+    const parsed = parseArgs(['--pm', 'my-api']);
+
+    expect(parsed.projectName).toBe('my-api');
+    expect(parsed.unknownFlags).toEqual(['--pm']);
+  });
 });

@@ -10,5 +10,6 @@ export const DEFAULT_SELECTIONS: Omit<UserSelections, 'projectName' | 'dryRun'> 
   databaseMode: 'memory',
   educational: true,
   installDeps: true,
+  packageManager: 'npm',
   initGit: true
 };

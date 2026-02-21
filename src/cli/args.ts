@@ -1,4 +1,4 @@
-import type { ParsedArgs } from '../core/types.js';
+import type { PackageManager, ParsedArgs } from '../core/types.js';
 
 const TRUE_VALUES = new Set(['1', 'true', 'yes', 'on']);
 const FALSE_VALUES = new Set(['0', 'false', 'no', 'off']);
@@ -16,6 +16,20 @@ function parseBooleanValue(value: string | undefined): boolean | undefined {
 
   if (FALSE_VALUES.has(normalized)) {
     return false;
+  }
+
+  return undefined;
+}
+
+function parsePackageManagerValue(value: string | undefined): PackageManager | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const normalized = value.trim().toLowerCase();
+
+  if (normalized === 'npm' || normalized === 'yarn') {
+    return normalized;
   }
 
   return undefined;
@@ -44,7 +58,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
     dryRun: false,
     install: true,
     git: true,
-    verbose: false
+    verbose: false,
+    packageManager: 'npm' as PackageManager
   };
 
   const provided = {
@@ -52,7 +67,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
     dryRun: false,
     install: false,
     git: false,
-    verbose: false
+    verbose: false,
+    packageManager: false
   };
 
   const unknownFlags: string[] = [];
@@ -60,7 +76,9 @@ export function parseArgs(argv: string[]): ParsedArgs {
 
   let positionalOnly = false;
 
-  for (const token of argv) {
+  for (let index = 0; index < argv.length; index += 1) {
+    const token = argv[index];
+
     if (positionalOnly) {
       positionals.push(token);
       continue;
@@ -140,6 +158,46 @@ export function parseArgs(argv: string[]): ParsedArgs {
 
       flags.verbose = parsedValue ?? true;
       provided.verbose = true;
+      continue;
+    }
+
+    if (name === 'package-manager' || name === 'pm') {
+      let rawValue = value;
+
+      if (rawValue === undefined) {
+        const nextToken = argv[index + 1];
+
+        if (nextToken !== undefined && !nextToken.startsWith('-')) {
+          const parsedNextToken = parsePackageManagerValue(nextToken);
+
+          if (parsedNextToken !== undefined) {
+            rawValue = nextToken;
+            index += 1;
+          }
+        }
+      }
+
+      const packageManager = parsePackageManagerValue(rawValue);
+      if (packageManager === undefined) {
+        unknownFlags.push(token);
+        continue;
+      }
+
+      flags.packageManager = packageManager;
+      provided.packageManager = true;
+      continue;
+    }
+
+    if (name === 'yarn') {
+      const parsedValue = parseBooleanValue(value);
+      if (value !== undefined && parsedValue === undefined) {
+        unknownFlags.push(token);
+        continue;
+      }
+
+      const useYarn = parsedValue ?? true;
+      flags.packageManager = useYarn ? 'yarn' : 'npm';
+      provided.packageManager = true;
       continue;
     }
 

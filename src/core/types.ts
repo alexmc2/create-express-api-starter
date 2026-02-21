@@ -7,6 +7,7 @@ export type DatabaseMode = 'memory' | 'postgres-psql' | 'postgres-docker';
 export type ModuleSystem = 'commonjs' | 'esm';
 
 export type JsDevWatcher = 'node-watch' | 'nodemon';
+export type PackageManager = 'npm' | 'yarn';
 
 export interface CliFlags {
   yes: boolean;
@@ -14,6 +15,7 @@ export interface CliFlags {
   install: boolean;
   git: boolean;
   verbose: boolean;
+  packageManager: PackageManager;
 }
 
 export interface FlagPresence {
@@ -22,6 +24,7 @@ export interface FlagPresence {
   install: boolean;
   git: boolean;
   verbose: boolean;
+  packageManager: boolean;
 }
 
 export interface ParsedArgs {
@@ -41,6 +44,7 @@ export interface UserSelections {
   databaseMode: DatabaseMode;
   educational: boolean;
   installDeps: boolean;
+  packageManager: PackageManager;
   initGit: boolean;
   dryRun: boolean;
 }

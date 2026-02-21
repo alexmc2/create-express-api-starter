@@ -7,6 +7,7 @@ import {
   jsDevWatcherLabel,
   languageLabel,
   moduleSystemLabel,
+  packageManagerLabel,
 } from '../core/labels.js';
 import { toDatabaseName } from '../core/naming.js';
 import type { GenerationPlan, UserSelections } from '../core/types.js';
@@ -16,34 +17,50 @@ import {
   printCard,
 } from '../utils/terminalUi.js';
 
+function installCommand(selection: UserSelections): string {
+  return `${selection.packageManager} install`;
+}
+
+function scriptCommand(selection: UserSelections, script: string): string {
+  if (selection.packageManager === 'yarn') {
+    return `yarn ${script}`;
+  }
+
+  if (script === 'test') {
+    return 'npm test';
+  }
+
+  return `npm run ${script}`;
+}
+
 function buildNextStepCommands(selection: UserSelections): string[] {
   const commands = [`cd ${selection.projectName}`];
 
   if (!selection.installDeps) {
-    commands.push('npm install');
+    commands.push(installCommand(selection));
   }
 
   commands.push('cp .env.example .env');
 
   if (selection.databaseMode === 'postgres-psql') {
-    commands.push('npm run db:create');
-    commands.push('npm run db:setup');
-    commands.push('npm run db:seed');
+    commands.push(scriptCommand(selection, 'db:create'));
+    commands.push(scriptCommand(selection, 'db:setup'));
+    commands.push(scriptCommand(selection, 'db:seed'));
   }
 
   if (selection.databaseMode === 'postgres-docker') {
-    commands.push('npm run db:up');
-    commands.push('npm run db:setup');
-    commands.push('npm run db:seed');
+    commands.push(scriptCommand(selection, 'db:up'));
+    commands.push(scriptCommand(selection, 'db:setup'));
+    commands.push(scriptCommand(selection, 'db:seed'));
   }
 
-  commands.push('npm run dev');
+  commands.push(scriptCommand(selection, 'dev'));
 
   if (selection.language === 'ts') {
-    commands.push('npm run build');
+    commands.push(scriptCommand(selection, 'build'));
   }
 
-  commands.push('npm test');
+  commands.push(scriptCommand(selection, 'test'));
 
   return commands;
 }
@@ -62,7 +79,7 @@ function buildPsqlSetupLines(
         `DATABASE_URL=postgres://postgres:<your-password>@localhost:5432/${databaseName}`,
       ]),
       pc.dim('# Then run the db scripts below:'),
-      ...formatCommandLines(['npm run db:create']),
+      ...formatCommandLines([scriptCommand(selection, 'db:create')]),
     ];
   }
 
@@ -140,6 +157,11 @@ export function printDryRunPlan(
       tone: selection.installDeps ? 'success' : 'warn',
     },
     {
+      key: 'Package manager',
+      value: packageManagerLabel(selection.packageManager),
+      tone: 'accent',
+    },
+    {
       key: 'Init git',
       value: selection.initGit ? 'Yes' : 'No',
       tone: selection.initGit ? 'success' : 'warn',
@@ -183,6 +205,11 @@ export function printNextSteps(
       key: 'Educational',
       value: selection.educational ? 'On' : 'Off',
       tone: selection.educational ? 'success' : 'muted',
+    },
+    {
+      key: 'Package manager',
+      value: packageManagerLabel(selection.packageManager),
+      tone: 'accent',
     },
   ];
 

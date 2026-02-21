@@ -14,6 +14,7 @@ const baseSelection: UserSelections = {
   databaseMode: 'memory',
   educational: true,
   installDeps: true,
+  packageManager: 'npm',
   initGit: false,
   dryRun: false,
 };
@@ -75,6 +76,21 @@ describe('printNextSteps', () => {
     expect(lines.some((line) => line.includes('npm run db:up'))).toBe(true);
     expect(lines.some((line) => line.includes('npm run db:setup'))).toBe(true);
     expect(lines.some((line) => line.includes('npm run db:seed'))).toBe(true);
+  });
+
+  it('prints yarn commands when yarn is selected', () => {
+    const lines = captureNextStepsLogs({
+      packageManager: 'yarn',
+      databaseMode: 'postgres-docker',
+      installDeps: false,
+    });
+
+    expect(lines.some((line) => line.includes('yarn install'))).toBe(true);
+    expect(lines.some((line) => line.includes('yarn db:up'))).toBe(true);
+    expect(lines.some((line) => line.includes('yarn db:setup'))).toBe(true);
+    expect(lines.some((line) => line.includes('yarn db:seed'))).toBe(true);
+    expect(lines.some((line) => line.includes('yarn dev'))).toBe(true);
+    expect(lines.some((line) => line.includes('yarn test'))).toBe(true);
   });
 
   it('prints Windows-specific Postgres setup guidance without sudo', () => {
