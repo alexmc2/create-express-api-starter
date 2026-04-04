@@ -7,7 +7,7 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [0.2.1] - 2026-04-04
 ### Security
-- Pinned patched transitive `minimatch` versions via npm `overrides` so installs no longer resolve the vulnerable `ejs -> jake -> filelist -> minimatch` path.
+- Pinned patched transitive `minimatch` versions via npm `overrides` so the `ejs -> jake -> filelist -> minimatch` path now resolves to a patched `minimatch` release instead of a vulnerable one.
 - Refreshed the lockfile to pull fixed `minimatch` and `brace-expansion` releases for both production and dev dependency paths.
 
 ## [0.2.0] - 2026-02-21
