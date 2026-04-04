@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-04-04
+### Security
+- Pinned patched transitive `minimatch` versions via npm `overrides` so installs no longer resolve the vulnerable `ejs -> jake -> filelist -> minimatch` path.
+- Refreshed the lockfile to pull fixed `minimatch` and `brace-expansion` releases for both production and dev dependency paths.
+
 ## [0.2.0] - 2026-02-21
 ### Added
 - Added package manager selection for dependency installation (`npm` or `yarn`) in interactive prompts and non-interactive runs.
